@@ -1,0 +1,20 @@
+Measure,Full dataset,1M sample,Difference (points)
+rows,9354555.0,999346.0,
+hidden_codes,5792508.0,617440.0,
+label_spellings,104.0,54.0,
+grch38,4643623.0,496036.0,
+unique,4641203.0,495788.0,
+dates_before_1990,111.0,11.0,
+% VUS,54.63,54.59,-0.03
+% B/LB,32.47,32.46,-0.01
+% P/LP,8.58,8.59,0.01
+% Conflicting,4.2,4.23,0.04
+% Other,0.12,0.11,-0.01
+% 0 stars,5.41,5.4,-0.01
+% 1 stars,77.55,77.54,-0.01
+% 2 stars,16.55,16.58,0.04
+% 3 stars,0.49,0.48,-0.02
+% 4 stars,0.0,0.0,0.0
+% one lab only,77.44,77.41,-0.04
+% no condition named,45.02,44.9,-0.12
+% SNV,92.43,92.43,-0.0
