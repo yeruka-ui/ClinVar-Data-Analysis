@@ -1,0 +1,50 @@
+table Conditions
+	lineageTag: 1f843706-6621-5d59-b904-fc274b0da676
+
+	measure 'P/LP Condition Variants' = COUNTROWS(Conditions)
+		formatString: #,0
+		lineageTag: 19a09808-ee80-5786-9aad-332bc1926ee1
+
+	column VariationID
+		dataType: int64
+		formatString: 0
+		lineageTag: a3baeec7-9fd3-55da-bc01-c04dba9e2d7d
+		summarizeBy: none
+		sourceColumn: VariationID
+
+		annotation SummarizationSetBy = User
+
+	column PhenotypeList
+		dataType: string
+		lineageTag: be3e2941-1c38-570c-9a70-b1097511694b
+		summarizeBy: none
+		sourceColumn: PhenotypeList
+
+		annotation SummarizationSetBy = User
+
+	column Group
+		dataType: string
+		lineageTag: ea5c41ab-5940-55c9-ab92-9325c61431bd
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = User
+
+	partition Conditions = m
+		mode: import
+		source =
+				let
+				    // Step 2.10: one row per (pathogenic variant, condition)
+				    Source = ClinVar,
+				    KeptColumns = Table.SelectColumns(Source, {"VariationID", "PhenotypeList", "Group"}),
+				    Pathogenic = Table.SelectRows(KeptColumns, each [Group] = "P/LP" and [PhenotypeList] <> null),
+				    SplitConditions = Table.ExpandListColumn(Table.TransformColumns(Pathogenic, {{"PhenotypeList", each Text.Split(_, "|")}}), "PhenotypeList"),
+				    Trimmed = Table.TransformColumns(SplitConditions, {{"PhenotypeList", Text.Trim, type text}}),
+				    // codes that hide inside multi-condition lists only appear after the split
+				    RealConditions = Table.SelectRows(Trimmed, each [PhenotypeList] <> "" and not List.Contains({"not provided", "not specified", "see cases"}, Text.Lower([PhenotypeList]))),
+				    Typed = Table.TransformColumnTypes(RealConditions, {{"VariationID", Int64.Type}, {"Group", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

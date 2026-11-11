@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
+  "pageOrder": [
+    "p1_dataset",
+    "p2_cleaning",
+    "p3_explore",
+    "p4_charts",
+    "p5_charts",
+    "p6_insights"
+  ],
+  "activePageName": "p1_dataset"
+}

@@ -1,0 +1,8 @@
+relationship 618ecfa3-47ec-59ea-b18b-4d1cd97dd0b0
+	fromColumn: Genes.VariationID
+	toColumn: ClinVar.VariationID
+
+relationship 9e73466f-c0ea-5d09-828e-0f5a3dbf157f
+	fromColumn: Conditions.VariationID
+	toColumn: ClinVar.VariationID
+

@@ -1,0 +1,158 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "p3_describe",
+  "position": {
+    "x": 20,
+    "y": 190,
+    "z": 8000,
+    "width": 300,
+    "height": 515,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "multiRowCard",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Median Submitters"
+                }
+              },
+              "queryRef": "ClinVar.Median Submitters",
+              "nativeQueryRef": "Median Submitters",
+              "displayName": "Median labs per variant"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Avg Submitters"
+                }
+              },
+              "queryRef": "ClinVar.Avg Submitters",
+              "nativeQueryRef": "Avg Submitters",
+              "displayName": "Average labs per variant"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Max Submitters"
+                }
+              },
+              "queryRef": "ClinVar.Max Submitters",
+              "nativeQueryRef": "Max Submitters",
+              "displayName": "Max labs per variant"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Median Length"
+                }
+              },
+              "queryRef": "ClinVar.Median Length",
+              "nativeQueryRef": "Median Length",
+              "displayName": "Median length (letters)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Max Length"
+                }
+              },
+              "queryRef": "ClinVar.Max Length",
+              "nativeQueryRef": "Max Length",
+              "displayName": "Max length (letters)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Earliest Review"
+                }
+              },
+              "queryRef": "ClinVar.Earliest Review",
+              "nativeQueryRef": "Earliest Review",
+              "displayName": "Earliest review"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Latest Review"
+                }
+              },
+              "queryRef": "ClinVar.Latest Review",
+              "nativeQueryRef": "Latest Review",
+              "displayName": "Latest review"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Describe (numeric columns)'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

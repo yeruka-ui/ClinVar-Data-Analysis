@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "p3_counts",
+  "position": {
+    "x": 335,
+    "y": 190,
+    "z": 9000,
+    "width": 360,
+    "height": 250,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Group"
+                }
+              },
+              "queryRef": "ClinVar.Group",
+              "nativeQueryRef": "Group"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "Variants"
+                }
+              },
+              "queryRef": "ClinVar.Variants",
+              "nativeQueryRef": "Variants",
+              "displayName": "Variants"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ClinVar"
+                    }
+                  },
+                  "Property": "% of Labeled"
+                }
+              },
+              "queryRef": "ClinVar.% of Labeled",
+              "nativeQueryRef": "% of Labeled",
+              "displayName": "% of labeled"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ClinVar"
+                  }
+                },
+                "Property": "Variants"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    },
+    "objects": {},
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Value counts: clinical significance group'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

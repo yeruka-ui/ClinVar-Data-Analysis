@@ -1,0 +1,73 @@
+table Genes
+	lineageTag: 800b5f38-c7d1-5de5-9a7c-6ef2a6bf6c29
+
+	measure 'Gene Variants' = COUNTROWS(Genes)
+		formatString: #,0
+		lineageTag: 1c916be3-1001-5e22-919b-077bdf1f9d25
+
+	measure 'Unique Genes' = DISTINCTCOUNT(Genes[GeneSymbol])
+		formatString: #,0
+		lineageTag: b899c619-1f23-505b-b391-86a28ce376e5
+
+	measure 'P/LP Gene Variants' = CALCULATE([Gene Variants], Genes[Group] = "P/LP")
+		formatString: #,0
+		lineageTag: de4cdab9-cdec-597e-a549-8c697fd94cff
+
+	measure 'Conflict %' = DIVIDE(CALCULATE(COUNTROWS(Genes), Genes[Group] = "Conflicting"), COUNTROWS(Genes))
+		formatString: 0.0%
+		lineageTag: 578ae67a-8181-51bc-a38a-ad5b8ba0b3eb
+
+	measure 'P/LP %' = DIVIDE(CALCULATE(COUNTROWS(Genes), Genes[Group] = "P/LP"), COUNTROWS(Genes))
+		formatString: 0.0%
+		lineageTag: 3ca83518-958a-5ca0-ba79-1847da2fbed4
+
+	measure 'Gene Variants (100+)' = IF([Gene Variants] >= 100, [Gene Variants])
+		formatString: #,0
+		lineageTag: e16221f2-9d6d-5b11-a7f5-d9df73996802
+
+	measure 'Conflict % (100+)' = IF([Gene Variants] >= 100, [Conflict %])
+		formatString: 0.0%
+		lineageTag: 143bb376-698a-56d0-a27a-784429575274
+
+	column VariationID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3250ae28-7f39-5054-a088-118dd69738ef
+		summarizeBy: none
+		sourceColumn: VariationID
+
+		annotation SummarizationSetBy = User
+
+	column GeneSymbol
+		dataType: string
+		lineageTag: 8ca7492c-5b94-5cd4-acfd-469acbabf4bd
+		summarizeBy: none
+		sourceColumn: GeneSymbol
+
+		annotation SummarizationSetBy = User
+
+	column Group
+		dataType: string
+		lineageTag: b8429bc3-73cc-5ffe-aa31-b10e51a7cbb9
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = User
+
+	partition Genes = m
+		mode: import
+		source =
+				let
+				    // Step 2.9: one row per (variant, gene); labeled variants only
+				    Source = ClinVar,
+				    KeptColumns = Table.SelectColumns(Source, {"VariationID", "GeneSymbol", "Group"}),
+				    Labeled = Table.SelectRows(KeptColumns, each [Group] <> null and [GeneSymbol] <> null),
+				    SplitGenes = Table.ExpandListColumn(Table.TransformColumns(Labeled, {{"GeneSymbol", each Text.Split(_, ";")}}), "GeneSymbol"),
+				    Trimmed = Table.TransformColumns(SplitGenes, {{"GeneSymbol", Text.Trim, type text}}),
+				    NonEmpty = Table.SelectRows(Trimmed, each [GeneSymbol] <> ""),
+				    Typed = Table.TransformColumnTypes(NonEmpty, {{"VariationID", Int64.Type}, {"Group", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

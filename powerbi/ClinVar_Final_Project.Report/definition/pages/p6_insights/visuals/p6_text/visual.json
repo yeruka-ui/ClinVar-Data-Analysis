@@ -1,0 +1,161 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "p6_text",
+  "position": {
+    "x": 20,
+    "y": 10,
+    "z": 1000,
+    "width": 1240,
+    "height": 700,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "2.4.2 Insights",
+                    "textStyle": {
+                      "fontSize": "20pt",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold",
+                      "color": "#14213D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "1. Most variants are still unknown (Chart 1). 54.7% of labeled variants are uncertain (VUS); only 8.6% are pathogenic and 32.5% benign.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "2. A few genes dominate (Chart 2). TTN (6,134), BRCA2 (5,779), NF1 (5,740), BRCA1 (4,330) and ATM (3,908) have the most pathogenic variants.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "3. Uncertainty grows faster than answers (Chart 3). Reviews rose from ~33K variants (2017) to ~1.37M (2025); VUS grew from 13K to 878K while pathogenic grew from 9K to 73K.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "4. Most variants have no second opinion (Chart 4). 77.5% are reported by only one lab (median = 1, max = 97).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "5. Bigger genes have more disagreement (Chart 5). Across 7,280 genes with 100+ variants, the rank correlation between size and conflict rate is 0.68; BRCA2 (26.4%) and BRCA1 (21.6%) stand out.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "6. Big DNA changes are easier to judge (Chart 6). Deletions are 60.7% pathogenic; single-letter changes (SNVs) are only 4.9% pathogenic and 57.4% uncertain.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "7. Expert review is rare (Chart 7). 77.6% of variants have 1 star (one lab); only 0.49% were checked by an expert panel or guideline.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "8. Cancer leads the conditions (Chart 8). 'Hereditary cancer-predisposing syndrome' is linked to ~22,600 pathogenic variants, far ahead of the next ('Inborn genetic diseases', ~7,200).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "9. Cleaning was essential. Without the GRCh38 filter every count would be doubled; 104 label spellings would split the charts; 45% of conditions hide behind 'not provided'.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Numbers are from the ClinVar November 2026 release with all slicers cleared. These are patterns in a public database, not medical advice.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "fontFamily": "Segoe UI",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

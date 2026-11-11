@@ -1,0 +1,38 @@
+{
+  "name": "ClinVar",
+  "dataColors": [
+    "#E4572E",
+    "#F3A712",
+    "#3BB273",
+    "#5B6C8F",
+    "#B8C4D0",
+    "#0FA3B1",
+    "#14213D",
+    "#8E6C8A"
+  ],
+  "foreground": "#14213D",
+  "background": "#FFFFFF",
+  "tableAccent": "#0FA3B1",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 13,
+      "color": "#14213D"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#14213D"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#3A3F51"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 26,
+      "color": "#14213D"
+    }
+  }
+}

@@ -1,0 +1,320 @@
+table ClinVar
+	lineageTag: 2b5730b1-d162-5bd9-a0b0-e6fd5dd5202e
+
+	measure Variants = COUNTROWS(ClinVar)
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 335ae0f0-23f9-5ffa-8ac1-681ddf1a4213
+
+	measure 'Labeled Variants' = CALCULATE([Variants], NOT ISBLANK(ClinVar[Group]))
+		formatString: #,0
+		displayFolder: Counts
+		lineageTag: 96da1e63-3181-5f28-b566-a21e79677d4a
+
+	measure '% of Labeled' = DIVIDE([Variants], CALCULATE([Variants], ALL(ClinVar[Group]), NOT ISBLANK(ClinVar[Group])))
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: c01590e2-5637-551a-872f-7b736a88073b
+
+	measure '% VUS' = DIVIDE(CALCULATE([Variants], ClinVar[Group] = "VUS"), [Labeled Variants])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: df02d213-8630-5e9f-a313-dc62afd1788d
+
+	measure '% Single Submitter' = DIVIDE(CALCULATE([Variants], ClinVar[NumberSubmitters] = 1), [Variants])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: d89710ae-6eba-52a3-b965-50be1c363cb8
+
+	measure '% Expert Panel or Guideline' = DIVIDE(CALCULATE([Variants], ClinVar[Stars] >= 3), [Variants])
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: 4d903ed7-3e5b-5c74-8f5a-f0cc9b981feb
+
+	measure '% of Variants' = DIVIDE([Variants], CALCULATE([Variants], ALLSELECTED(ClinVar[Stars])))
+		formatString: 0.0%
+		displayFolder: Shares
+		lineageTag: cefd3e31-821e-5605-bf74-cf8937f673b0
+
+	measure 'Duplicates Removed' = 4639270 - COUNTROWS(ALL(ClinVar))
+		formatString: #,0
+		displayFolder: Cleaning
+		lineageTag: 381bb6e8-4813-51b1-864d-fdcd3d001f1f
+
+	measure 'Date Placeholders Removed' = CALCULATE([Variants], ClinVar[DatePlaceholder] = TRUE())
+		formatString: #,0
+		displayFolder: Cleaning
+		lineageTag: 87e21b97-9b7c-5881-8429-5e5eacd7ee3a
+
+	measure 'Submitters Q1' = PERCENTILE.INC(ClinVar[NumberSubmitters], 0.25)
+		formatString: 0.##
+		displayFolder: Cleaning
+		lineageTag: 4f331423-d473-5bec-8422-cc67e8f4e3ad
+
+	measure 'Submitters Q3' = PERCENTILE.INC(ClinVar[NumberSubmitters], 0.75)
+		formatString: 0.##
+		displayFolder: Cleaning
+		lineageTag: 2e22f278-298f-58c8-a4b7-c55627790db1
+
+	measure 'IQR Fence' = [Submitters Q3] + 1.5 * ([Submitters Q3] - [Submitters Q1])
+		formatString: 0.##
+		displayFolder: Cleaning
+		lineageTag: 5f1fda23-8c42-5ae3-8e6f-6ab16108166f
+
+	measure '% Above Fence' = VAR f = [IQR Fence] RETURN DIVIDE(COUNTROWS(FILTER(ClinVar, ClinVar[NumberSubmitters] > f)), [Variants])
+		formatString: 0.0%
+		displayFolder: Cleaning
+		lineageTag: 8855adc4-f183-5e4f-b8bd-6d282b69508c
+
+	measure 'Length Cut (99.9%)' = PERCENTILE.INC(ClinVar[Length], 0.999)
+		formatString: #,0
+		displayFolder: Cleaning
+		lineageTag: 6e9ca689-9119-5e15-80bf-29c77e8a7fe4
+
+	measure 'Length Outliers' = VAR c = [Length Cut (99.9%)] RETURN COUNTROWS(FILTER(ClinVar, ClinVar[Length] > c))
+		formatString: #,0
+		displayFolder: Cleaning
+		lineageTag: 9982b9a2-2397-5aba-b8c9-c57864d9650a
+
+	measure 'Median Submitters' = MEDIAN(ClinVar[NumberSubmitters])
+		formatString: 0.##
+		displayFolder: Describe
+		lineageTag: eaae6433-89e3-578b-b58d-b321c90d96ea
+
+	measure 'Avg Submitters' = AVERAGE(ClinVar[NumberSubmitters])
+		formatString: 0.00
+		displayFolder: Describe
+		lineageTag: b7ac6fd2-159e-595c-b5de-02415fcf2090
+
+	measure 'Max Submitters' = MAX(ClinVar[NumberSubmitters])
+		formatString: #,0
+		displayFolder: Describe
+		lineageTag: dde3b14b-027d-5326-99b3-9785258eb09c
+
+	measure 'Median Length' = MEDIAN(ClinVar[Length])
+		formatString: #,0
+		displayFolder: Describe
+		lineageTag: 6177c8b3-42f1-533c-bf99-36781f3d680e
+
+	measure 'Max Length' = MAX(ClinVar[Length])
+		formatString: #,0
+		displayFolder: Describe
+		lineageTag: ad48931d-a7da-5f7d-85ea-32358615b837
+
+	measure 'Earliest Review' = MIN(ClinVar[LastEvaluated])
+		formatString: yyyy-mm-dd
+		displayFolder: Describe
+		lineageTag: bec3e68b-32e4-5d42-9eb8-4c5aa0aef152
+
+	measure 'Latest Review' = MAX(ClinVar[LastEvaluated])
+		formatString: yyyy-mm-dd
+		displayFolder: Describe
+		lineageTag: cc422686-02e0-57e1-87b5-d3b871d7f427
+
+	measure 'Variants 2012-2025' = CALCULATE([Variants], KEEPFILTERS(ClinVar[Year] >= 2012 && ClinVar[Year] <= 2025), KEEPFILTERS(ClinVar[Group] IN {"P/LP", "VUS", "B/LB", "Conflicting"}))
+		formatString: #,0
+		displayFolder: Charts
+		lineageTag: 587f076a-1e70-51aa-ad50-3591eb92faa2
+
+	measure 'Labeled Variants (Top 6 Types)' = VAR cur = CALCULATE([Labeled Variants], REMOVEFILTERS(ClinVar[Group])) VAR r = RANKX(ALLSELECTED(ClinVar[Type]), CALCULATE([Labeled Variants], REMOVEFILTERS(ClinVar[Group])), cur, DESC) RETURN IF(r <= 6, [Labeled Variants])
+		formatString: #,0
+		displayFolder: Charts
+		lineageTag: cbf5d6f0-a81b-5d70-b938-cf8a91bec822
+
+	column VariationID
+		dataType: int64
+		formatString: 0
+		lineageTag: 5671433c-50eb-5692-a7d5-893544968adf
+		summarizeBy: none
+		sourceColumn: VariationID
+
+		annotation SummarizationSetBy = User
+
+	column Type
+		dataType: string
+		lineageTag: 31a203c0-60d0-52bd-989a-4a03ba284f3d
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = User
+
+	column GeneSymbol
+		dataType: string
+		lineageTag: 51eccff6-b1e7-5e20-9a15-e7759c8ce460
+		summarizeBy: none
+		sourceColumn: GeneSymbol
+
+		annotation SummarizationSetBy = User
+
+	column ClinicalSignificance
+		dataType: string
+		lineageTag: 9d71e2a3-c9a7-5a92-a96d-ab0a4a5aaab5
+		summarizeBy: none
+		sourceColumn: ClinicalSignificance
+
+		annotation SummarizationSetBy = User
+
+	column ReviewStatus
+		dataType: string
+		lineageTag: 4c5822d9-843f-5b68-8c26-b93a65504c5e
+		summarizeBy: none
+		sourceColumn: ReviewStatus
+
+		annotation SummarizationSetBy = User
+
+	column NumberSubmitters
+		dataType: int64
+		formatString: 0
+		lineageTag: 876dcadc-cfb3-5782-aa0a-cea13b2c4594
+		summarizeBy: sum
+		sourceColumn: NumberSubmitters
+
+		annotation SummarizationSetBy = User
+
+	column PhenotypeList
+		dataType: string
+		lineageTag: 3113170f-488d-5aab-a3f7-9c395687a9df
+		summarizeBy: none
+		sourceColumn: PhenotypeList
+
+		annotation SummarizationSetBy = User
+
+	column Chromosome
+		dataType: string
+		lineageTag: f959f867-cc06-54d7-9612-0a48d9cc0bd8
+		summarizeBy: none
+		sourceColumn: Chromosome
+
+		annotation SummarizationSetBy = User
+
+	column Start
+		dataType: int64
+		formatString: 0
+		lineageTag: 68da2ef1-547c-5871-9e9c-4a6755df1aa1
+		summarizeBy: none
+		sourceColumn: Start
+
+		annotation SummarizationSetBy = User
+
+	column Stop
+		dataType: int64
+		formatString: 0
+		lineageTag: ad7ae058-4bf0-5601-b00d-36ec9170eed1
+		summarizeBy: none
+		sourceColumn: Stop
+
+		annotation SummarizationSetBy = User
+
+	column DatePlaceholder
+		dataType: boolean
+		lineageTag: 98edcd66-d762-54bf-999a-eb0bde9e2058
+		summarizeBy: none
+		sourceColumn: DatePlaceholder
+
+		annotation SummarizationSetBy = User
+
+	column LastEvaluated
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 29efb8a5-457a-5283-b3c8-ffe396349914
+		summarizeBy: none
+		sourceColumn: LastEvaluated
+
+		annotation SummarizationSetBy = User
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 759dd487-7937-5452-b4a0-b8596d1fdc14
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = User
+
+	column Group
+		dataType: string
+		lineageTag: 19d84ea9-925e-51aa-a51d-ea25ca725911
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = User
+
+	column Stars
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d1ee1fb-95db-5c80-acc0-0cd4d5b94af1
+		summarizeBy: none
+		sourceColumn: Stars
+
+		annotation SummarizationSetBy = User
+
+	column Length
+		dataType: int64
+		formatString: #,0
+		lineageTag: f699a94e-b5a2-5170-ae2e-164d6323cfe9
+		summarizeBy: none
+		sourceColumn: Length
+
+		annotation SummarizationSetBy = User
+
+	column SubmittersCapped
+		dataType: int64
+		formatString: 0
+		lineageTag: 7944c1bd-5286-5df2-aa2f-b8fbcac08268
+		summarizeBy: none
+		sourceColumn: SubmittersCapped
+
+		annotation SummarizationSetBy = User
+
+	partition ClinVar = m
+		mode: import
+		source =
+				let
+				    // Step 2.2 (acquisition): read every part in the folder; QuoteStyle.None because ClinVar text has stray " marks
+				    Source = Folder.Files(FolderPath),
+				    Parts = Table.SelectRows(Source, each Text.StartsWith([Name], "clinvar_GRCh38_part") and Text.Lower([Extension]) = ".txt"),
+				    Parsed = Table.AddColumn(Parts, "Data", each Table.PromoteHeaders(Csv.Document([Content], [Delimiter = "#(tab)", Columns = 43, Encoding = 65001, QuoteStyle = QuoteStyle.None]), [PromoteAllScalars = true])),
+				    Combined = Table.Combine(Parsed[Data]),
+				    // Step 2.1: keep the 12 columns the analysis needs
+				    KeptColumns = Table.SelectColumns(Combined, {"VariationID", "Type", "GeneSymbol", "ClinicalSignificance", "ReviewStatus", "NumberSubmitters", "PhenotypeList", "Assembly", "Chromosome", "Start", "Stop", "LastEvaluated"}),
+				    // Step 2.2: confirm genome build, then drop the now-constant column
+				    GRCh38Only = Table.SelectRows(KeptColumns, each [Assembly] = "GRCh38"),
+				    RemovedAssembly = Table.RemoveColumns(GRCh38Only, {"Assembly"}),
+				    // Step 2.4: one row per variant
+				    RemovedDuplicates = Table.Distinct(RemovedAssembly, {"VariationID"}),
+				    // Step 2.5: hidden missing codes -> real nulls (whole-cell match only)
+				    MissingCodes = {"-", "na", "NA", "", "not provided", "not specified", "See cases", "-1"},
+				    ReplacedMissingCodes = Table.TransformColumns(RemovedDuplicates, List.Transform(Table.ColumnNames(RemovedDuplicates), (c) => {c, (x) => if List.Contains(MissingCodes, x) then null else x})),
+				    // Step 2.6: data types
+				    TypedText = Table.TransformColumnTypes(ReplacedMissingCodes, {{"Type", type text}, {"GeneSymbol", type text}, {"ClinicalSignificance", type text}, {"ReviewStatus", type text}, {"PhenotypeList", type text}, {"Chromosome", type text}}),
+				    TypedNumbers = Table.TransformColumnTypes(TypedText, {{"VariationID", Int64.Type}, {"NumberSubmitters", Int64.Type}, {"Start", Int64.Type}, {"Stop", Int64.Type}}),
+				    NumberErrorsToNull = Table.ReplaceErrorValues(TypedNumbers, {{"VariationID", null}, {"NumberSubmitters", null}, {"Start", null}, {"Stop", null}}),
+				    TypedDate = Table.TransformColumns(NumberErrorsToNull, {{"LastEvaluated", each try Date.FromText(_, [Format = "MMM dd, yyyy", Culture = "en-US"]) otherwise null, type date}}),
+				    // Step 2.7: flag impossible dates (before 1990) so they can be counted, then blank them
+				    FlaggedDates = Table.AddColumn(TypedDate, "DatePlaceholder", each [LastEvaluated] <> null and [LastEvaluated] < #date(1990, 1, 1), type logical),
+				    CleanDates = Table.AddColumn(FlaggedDates, "LastEvaluatedClean", each if [DatePlaceholder] then null else [LastEvaluated], type date),
+				    SwappedDates = Table.RenameColumns(Table.RemoveColumns(CleanDates, {"LastEvaluated"}), {{"LastEvaluatedClean", "LastEvaluated"}}),
+				    // Step 2.8: new columns
+				    AddedYear = Table.AddColumn(SwappedDates, "Year", each if [LastEvaluated] = null then null else Date.Year([LastEvaluated]), Int64.Type),
+				    AddedGroup = Table.AddColumn(AddedYear, "Group", each
+				        let s = Text.Lower([ClinicalSignificance] ?? "") in
+				        if s = "" then null
+				        else if Text.Contains(s, "conflicting") then "Conflicting"
+				        else if Text.Contains(s, "pathogenic") and not Text.Contains(s, "benign") then "P/LP"
+				        else if Text.Contains(s, "benign") and not Text.Contains(s, "pathogenic") then "B/LB"
+				        else if Text.Contains(s, "uncertain") or Text.StartsWith(s, "vus") then "VUS"
+				        else "Other", type text),
+				    AddedStars = Table.AddColumn(AddedGroup, "Stars", each
+				        let s = Text.Lower([ReviewStatus] ?? "") in
+				        if Text.Contains(s, "practice guideline") then 4
+				        else if Text.Contains(s, "expert panel") then 3
+				        else if Text.Contains(s, "multiple submitters") and Text.Contains(s, "no conflict") then 2
+				        else if Text.Contains(s, "criteria provided") then 1
+				        else 0, Int64.Type),
+				    AddedLength = Table.AddColumn(AddedStars, "Length", each if [Start] = null or [Stop] = null then null else [Stop] - [Start] + 1, Int64.Type),
+				    AddedSubmittersCapped = Table.AddColumn(AddedLength, "SubmittersCapped", each if [NumberSubmitters] = null then null else List.Min({[NumberSubmitters], 20}), Int64.Type)
+				in
+				    AddedSubmittersCapped
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,36 @@
+table Funnel
+	lineageTag: 1da4f67d-0760-5b86-bd5a-576fb02f783f
+
+	column Order
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f8f68d8-604f-5462-9a11-6c67f8971085
+		summarizeBy: none
+		sourceColumn: [Order]
+
+		annotation SummarizationSetBy = User
+
+	column Stage
+		dataType: string
+		lineageTag: 3c832762-b6a7-5350-b08b-ab3135bdc2d8
+		summarizeBy: none
+		sourceColumn: [Stage]
+		sortByColumn: Order
+
+		annotation SummarizationSetBy = User
+
+	column Rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: e42f3c88-b502-5335-abb9-d98b17f64268
+		summarizeBy: sum
+		sourceColumn: [Rows]
+
+		annotation SummarizationSetBy = User
+
+	partition Funnel = calculated
+		mode: import
+		source = UNION(ROW("Order", 1, "Stage", "1 Raw ClinVar file (all builds)", "Rows", 9345867), ROW("Order", 2, "Stage", "2 GRCh38 only", "Rows", 4639270), ROW("Order", 3, "Stage", "3 Unique variants", "Rows", COUNTROWS(ClinVar)), ROW("Order", 4, "Stage", "4 With a clinical label", "Rows", COUNTROWS(FILTER(ClinVar, NOT ISBLANK(ClinVar[Group])))))
+
+	annotation PBI_ResultType = Table
+

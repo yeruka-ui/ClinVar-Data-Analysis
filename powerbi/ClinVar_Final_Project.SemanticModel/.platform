@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "ClinVar_Final_Project"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d8054324-0d39-5d92-8920-8a6c02e74eae"
+  }
+}

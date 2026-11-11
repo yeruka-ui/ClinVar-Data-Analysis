@@ -1,0 +1,26 @@
+table 'Missing Values'
+	lineageTag: f2bbd6ed-5c59-5479-a27f-7db9860e0a81
+
+	column ColumnName
+		dataType: string
+		lineageTag: 2ba55f57-8543-5859-b27b-c410cbb7f34b
+		summarizeBy: none
+		sourceColumn: [ColumnName]
+
+		annotation SummarizationSetBy = User
+
+	column PctMissing
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 9a2b11e1-382b-5530-8082-e3c865a2c761
+		summarizeBy: sum
+		sourceColumn: [PctMissing]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Missing Values' = calculated
+		mode: import
+		source = UNION(ROW("ColumnName", "PhenotypeList", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[PhenotypeList]), COUNTROWS(ClinVar))), ROW("ColumnName", "LastEvaluated", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[LastEvaluated]), COUNTROWS(ClinVar))), ROW("ColumnName", "ClinicalSignificance", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[ClinicalSignificance]), COUNTROWS(ClinVar))), ROW("ColumnName", "ReviewStatus", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[ReviewStatus]), COUNTROWS(ClinVar))), ROW("ColumnName", "GeneSymbol", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[GeneSymbol]), COUNTROWS(ClinVar))), ROW("ColumnName", "NumberSubmitters", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[NumberSubmitters]), COUNTROWS(ClinVar))), ROW("ColumnName", "Start", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[Start]), COUNTROWS(ClinVar))), ROW("ColumnName", "Chromosome", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[Chromosome]), COUNTROWS(ClinVar))), ROW("ColumnName", "Type", "PctMissing", DIVIDE(COUNTBLANK(ClinVar[Type]), COUNTROWS(ClinVar))))
+
+	annotation PBI_ResultType = Table
+

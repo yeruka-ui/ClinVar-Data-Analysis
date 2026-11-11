@@ -1,0 +1,5 @@
+expression FolderPath = "C:\ClinVar\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: d8a45984-bd96-5d49-b5c6-ebc180f5be9b
+
+	annotation PBI_ResultType = Text
+
