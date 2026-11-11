@@ -6,7 +6,7 @@ table ClinVar
 		displayFolder: Counts
 		lineageTag: 335ae0f0-23f9-5ffa-8ac1-681ddf1a4213
 
-	measure 'Labeled Variants' = CALCULATE([Variants], NOT ISBLANK(ClinVar[Group]))
+	measure 'Labeled Variants' = CALCULATE([Variants], KEEPFILTERS(NOT ISBLANK(ClinVar[Group])))
 		formatString: #,0
 		displayFolder: Counts
 		lineageTag: 96da1e63-3181-5f28-b566-a21e79677d4a
