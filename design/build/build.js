@@ -25,16 +25,19 @@ const INK = C.text1, MUTE = C.accent6, WHITE = C.background1;
 const BLUE = C.accent1, CYAN = C.accent2, GREEN = C.accent3, LIME = C.accent4, NAVY = C.accent5;
 
 // ---------- layouts ----------
-pres.defineSlideMaster({ title: 'COVER', background: { path: 'bg_cover.png' } });
-for (const k of [1, 2, 3, 4]) pres.defineSlideMaster({ title: 'DIV' + k, background: { path: `bg_div${k}.png` } });
-pres.defineSlideMaster({ title: 'WHITE', background: { path: 'bg_white.png' } });
-pres.defineSlideMaster({ title: 'BLUE_A', background: { path: 'bg_blueA.png' } });
-pres.defineSlideMaster({ title: 'BLUE_B', background: { path: 'bg_blueB.png' } });
+pres.defineSlideMaster({ title: 'COVER', background: { color: 'FFFFFF' } });
+const DIVCOL = { 1: '1E4FFF', 2: '00A6D6', 3: '12B873', 4: '0A2A8A' };
+for (const k of [1, 2, 3, 4]) pres.defineSlideMaster({ title: 'DIV' + k, background: { color: DIVCOL[k] } });
+pres.defineSlideMaster({ title: 'WHITE', background: { color: 'FFFFFF' } });
+pres.defineSlideMaster({ title: 'BLUE_A', background: { color: '1E4FFF' } });
+pres.defineSlideMaster({ title: 'BLUE_B', background: { color: '0A2A8A' } });
 
 // ---------- helpers ----------
 let n = 0, origN = 0, curDark = false;
+const BGFILE = { COVER: 'cover', DIV1: 'div1', DIV2: 'div2', DIV3: 'div3', DIV4: 'div4', WHITE: 'white', BLUE_A: 'blueA', BLUE_B: 'blueB' };
 function newSlide(master, section, note) {
   const s = pres.addSlide({ masterName: master, sectionTitle: section });
+  s.addImage({ path: 'bg_' + BGFILE[master] + '.jpg', x: 0, y: 0, w: 10, h: 5.625, altText: 'Decorative background', objectName: 'Background' });
   s.addNotes(NOTES33[n] || ''); n++;
   curDark = master.startsWith('BLUE') || master.startsWith('DIV');
   if (master === 'WHITE' || master.startsWith('BLUE'))
