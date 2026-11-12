@@ -3,7 +3,9 @@ const SKILL = '/root/.claude/skills/synced/8c24175c-62ad-47a4-ba77-2175656d9d7d_
 const { applyTheme } = require(SKILL + '/scripts/apply_theme.js');
 const notes = require('./notes.json');
 const MEDIA = '../orig/x/ppt/media/';
+const SIZES = require('./chartsizes.json');
 const ROC = require('./roc.json'), IMP = require('./imp.json'), HIST = require('./hist.json');
+notes[15] = notes[15].replace('Now [Presenter 3] will show the Power BI version.', 'Before we leave the notebook, here are all eight charts we made.');
 notes[14] = 'Here are the results on the 40 thousand variants the models never saw. The baseline gets 79 percent accuracy but finds no harmful variants, so we compare AUC and recall instead. The random forest wins: AUC 0.81 against 0.78, and it is ahead in every other score too.';
 
 const THEME = { name: 'ClinVar DNA', headFontFace: 'Montserrat', bodyFontFace: 'Montserrat',
@@ -325,6 +327,20 @@ box(s, 7.0, 1.9, 2.45, 3.1, BLUE, 1.75);
 T(s, 'A tie, so pick the simpler model', { x: 7.2, y: 2.05, w: 2.1, h: 0.7, fontSize: 11, bold: true });
 stat(s, 7.2, 2.85, 2.1, '+6.6', 'points of conflict per extra lab', BLUE, 24);
 stat(s, 7.2, 3.9, 2.1, '+0.6', 'points for a gene with 10× more variants', CYAN, 24);
+
+// ================= NEW: ALL EIGHT CHARTS =================
+s = newSlide('WHITE', 'Part 2 · Data Cleaning', '[Presenter 2 · 0:20]\nThese are the eight charts we built in the notebook: the label mix, the top genes, reviews per year, labs per variant, gene size against disagreement, the type of DNA change, the trust stars and the linked conditions. [Presenter 3] will now show the same project in Power BI, where we can explore these views interactively.');
+tag(s, 'PYTHON NOTEBOOK'); title(s, 'The eight charts from the notebook');
+const caps = ['1 · Label mix', '2 · Top pathogenic genes', '3 · Reviews per year', '4 · Labs per variant', '5 · Gene size vs. conflict', '6 · Type of DNA change', '7 · Trust stars', '8 · Linked conditions'];
+caps.forEach((cap, i) => {
+  const col = i % 4, row = Math.floor(i / 4), cw = 2.1, ch = 1.25;
+  const x = 0.55 + col * 2.27, y = 1.8 + row * 1.7;
+  const [iw, ih] = SIZES[i], r = iw / ih;
+  let w = cw, h = cw / r; if (h > ch) { h = ch; w = ch * r; }
+  box(s, x, y, cw, ch, C.accent6, 0.75);
+  s.addImage({ path: 'fig/chart' + (i + 1) + '.png', x: x + (cw - w) / 2, y: y + (ch - h) / 2, w, h, altText: 'Notebook chart: ' + cap });
+  T(s, cap, { x, y: y + ch + 0.06, w: cw, h: 0.25, fontSize: 9, bold: true, color: MUTE });
+});
 
 // ================= 17 DIVIDER 3 =================
 pres.addSection({ title: 'Part 3 · Power BI' });
