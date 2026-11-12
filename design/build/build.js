@@ -36,6 +36,42 @@ pres.defineSlideMaster({ title: 'BLUE_B', background: { color: '0A2A8A' } });
 
 // ---------- helpers ----------
 let n = 0, origN = 0, curDark = false;
+
+// ---------- native decoration (no large pictures) ----------
+const PX = 1 / 96;
+const GRADCOL = { DIV1: '010101', BLUE_A: '010101', DIV2: '020202', DIV3: '030303', DIV4: '040404', BLUE_B: '040404' };
+const hexLine = (s, cx, cy, r, color, transp, w) => s.addShape(S.hexagon, { x: (cx - r) * PX, y: (cy - Math.sqrt(3) * r / 2) * PX, w: 2 * r * PX, h: Math.sqrt(3) * r * PX, rotate: 90,
+  fill: { type: 'none' }, line: { color, width: w || 1.5, transparency: transp || 0 }, objectName: 'Decoration' });
+const circLine = (s, cx, cy, r, color, w) => s.addShape(S.ellipse, { x: (cx - r) * PX, y: (cy - r) * PX, w: 2 * r * PX, h: 2 * r * PX,
+  fill: { type: 'none' }, line: { color, width: w || 1.5 }, objectName: 'Decoration' });
+function helix(s, o) {                      // double helix drawn from native circles and lines
+  const n = Math.floor(o.L / o.step), items = [], a0 = o.rot * Math.PI / 180;
+  const tx = (px, py) => { const dx = px - o.L / 2, dy = py - o.H / 2; return [o.cx + dx * Math.cos(a0) - dy * Math.sin(a0), o.cy + dx * Math.sin(a0) + dy * Math.cos(a0)]; };
+  for (let i = 0; i <= n; i++) {
+    const x = o.r + i * o.step, a = 2 * Math.PI * o.turns * i / n, sn = Math.sin(a), cs = Math.cos(a);
+    const [ax, ay] = tx(x, o.H / 2 + o.A * sn), [bx, by] = tx(x, o.H / 2 - o.A * sn);
+    items.push({ z: cs, c: [ax, ay, o.r * (0.75 + 0.25 * cs), o.c1[i % o.c1.length]] });
+    items.push({ z: -cs, c: [bx, by, o.r * (0.75 - 0.25 * cs), o.c2[i % o.c2.length]] });
+    if (i % 3 === 0) items.push({ z: 0, l: [ax, ay, bx, by] });
+  }
+  items.sort((p, q) => p.z - q.z);
+  for (const it of items) {
+    if (it.c) { const [cx, cy, r, col] = it.c; if (cx < -20 || cx > 980 || cy < -20 || cy > 560) continue;
+      s.addShape(S.ellipse, { x: (cx - r) * PX, y: (cy - r) * PX, w: 2 * r * PX, h: 2 * r * PX, fill: { color: col.replace('#', '') }, line: { type: 'none' }, objectName: 'Helix bead' }); }
+    else { const [x1, y1, x2, y2] = it.l; if (Math.max(x1, x2) < 0 || Math.min(x1, x2) > 960 || Math.max(y1, y2) < 0 || Math.min(y1, y2) > 540) continue;
+      s.addShape(S.line, { x: Math.min(x1, x2) * PX, y: Math.min(y1, y2) * PX, w: Math.abs(x2 - x1) * PX, h: Math.abs(y2 - y1) * PX, flipV: (x2 - x1) * (y2 - y1) < 0,
+        line: { color: it.rung || o.rung, width: 2.5 }, objectName: 'Helix rung' }); }
+  }
+}
+const HC = { L: 1000, H: 250, A: 88, turns: 3, step: 10, r: 8.5, cx: 760, cy: 275, rot: -38, c1: ['#1E4FFF', '#1E4FFF', '#7FC4FF', '#FFFFFF', '#00A6D6'], c2: ['#12B873', '#12B873', '#A8E63D', '#FFFFFF', '#00C2A8'], rung: '9DB8E8' };
+const HD = { L: 1000, H: 220, A: 80, turns: 2.8, step: 10, r: 8, cx: 810, cy: 340, rot: -38, c1: ['#1E4FFF', '#7FC4FF', '#FFFFFF', '#00A6D6'], c2: ['#12B873', '#A8E63D', '#FFFFFF', '#00C2A8'], rung: 'EAF3FF' };
+function decorate(s, master) {
+  if (master === 'WHITE') { circLine(s, 880, 30, 130, 'BFDCFF', 1.5); hexLine(s, 800, 62, 26, 'BFDCFF', 0, 1.5); return; }
+  if (master === 'COVER') { circLine(s, 760, 270, 330, 'BFDCFF', 1.5); circLine(s, 537, 457, 17, '12B873', 2); circLine(s, 430, 120, 9, '1E4FFF', 2); hexLine(s, 878, 462, 34, 'A8E63D', 0, 2); helix(s, HC); return; }
+  s.background = { color: GRADCOL[master] };                         // replaced by a native gradient in post.py
+  hexLine(s, 830, 60, 70, 'FFFFFF', 65, 1.5); hexLine(s, 700, 110, 40, 'FFFFFF', 65, 1.5); hexLine(s, 930, 150, 32, 'FFFFFF', 70, 1.5);
+  if (master.startsWith('DIV')) helix(s, HD);
+}
 const BGFILE = { COVER: 'cover', DIV1: 'div1', DIV2: 'div2', DIV3: 'div3', DIV4: 'div4', WHITE: 'white', BLUE_A: 'blueA', BLUE_B: 'blueB' };
 const _addSection = pres.addSection.bind(pres);
 pres.addSection = (o) => { if (!FLAG('NOSECT')) _addSection(o); };
@@ -45,7 +81,7 @@ function newSlide(master, section, note) {
   if (FLAG('NOIMG')) s.addImage = () => s;
   if (FLAG('NOCHART')) s.addChart = () => s;
   if (FLAG('NONOTES')) s.addNotes = () => s;
-  s.addImage({ path: 'bg_' + BGFILE[master] + '.jpg', x: 0, y: 0, w: 10, h: 5.625, altText: 'Decorative background', objectName: 'Background' });
+  decorate(s, master);
   s.addNotes(NOTES33[n] || ''); n++;
   curDark = master.startsWith('BLUE') || master.startsWith('DIV');
   if (master === 'WHITE' || master.startsWith('BLUE'))
@@ -350,7 +386,7 @@ caps.forEach((cap, i) => {
   const [iw, ih] = SIZES[i], r = iw / ih;
   let w = cw, h = cw / r; if (h > ch) { h = ch; w = ch * r; }
   box(s, x, y, cw, ch, C.accent6, 0.75);
-  s.addImage({ path: 'fig/chart' + (i + 1) + '.png', x: x + (cw - w) / 2, y: y + (ch - h) / 2, w, h, altText: 'Notebook chart: ' + cap });
+  s.addImage({ path: 'fig_small/chart' + (i + 1) + '.png', x: x + (cw - w) / 2, y: y + (ch - h) / 2, w, h, altText: 'Notebook chart: ' + cap });
   T(s, cap, { x, y: y + ch + 0.06, w: cw, h: 0.25, fontSize: 9, bold: true, color: MUTE });
 });
 
