@@ -3,6 +3,8 @@ const SKILL = '/root/.claude/skills/synced/8c24175c-62ad-47a4-ba77-2175656d9d7d_
 const { applyTheme } = require(SKILL + '/scripts/apply_theme.js');
 const notes = require('./notes.json');
 const MEDIA = '../orig/x/ppt/media/';
+const ROC = require('./roc.json'), IMP = require('./imp.json'), HIST = require('./hist.json');
+notes[14] = 'Here are the results on the 40 thousand variants the models never saw. The baseline gets 79 percent accuracy but finds no harmful variants, so we compare AUC and recall instead. The random forest wins: AUC 0.81 against 0.78, and it is ahead in every other score too.';
 
 const THEME = { name: 'ClinVar DNA', headFontFace: 'Montserrat', bodyFontFace: 'Montserrat',
   colors: { dk1:'0A1F44', lt1:'FFFFFF', dk2:'0A2A8A', lt2:'DCEBFF',
@@ -27,10 +29,10 @@ pres.defineSlideMaster({ title: 'BLUE_A', background: { path: 'bg_blueA.png' } }
 pres.defineSlideMaster({ title: 'BLUE_B', background: { path: 'bg_blueB.png' } });
 
 // ---------- helpers ----------
-let n = 0, curDark = false;
-function newSlide(master, section, noteText) {
+let n = 0, origN = 0, curDark = false;
+function newSlide(master, section, note) {
   const s = pres.addSlide({ masterName: master, sectionTitle: section });
-  s.addNotes(notes[n] || ''); n++;
+  s.addNotes(note != null ? note : (notes[origN++] || '')); n++;
   curDark = master.startsWith('BLUE') || master.startsWith('DIV');
   if (master === 'WHITE' || master.startsWith('BLUE'))
     s.addText(String(n), { isTextBox: true, x: 9.0, y: 5.2, w: 0.45, h: 0.25, fontSize: 10, color: curDark ? WHITE : MUTE, align: 'right', margin: 0, objectName: 'Slide number' });
@@ -226,6 +228,27 @@ tag(s, 'DATA CLEANING', true); title(s, 'Outliers and data types');
 });
 T(s, 'Data types: all text at load → numbers (positions, submitters), real dates (review date), categories (type, label) to save memory.', { x: 0.55, y: 4.75, w: 8.3, h: 0.45, fontSize: 10, color: WHITE });
 
+// ================= NEW A: ML PROCESS =================
+s = newSlide('WHITE', 'Part 2 · Data Cleaning', '[Presenter 2 · 0:40]\nNow the machine learning. The question: can the recorded facts about a variant tell a pathogenic one from a benign one? Here is exactly how we ran it. One: we kept only variants labeled pathogenic or benign, because for uncertain ones the true answer is unknown. Two: a 200 thousand variant sample with the same 21 percent pathogenic share. Three: each variant becomes 38 numbers, such as its type, length, number of labs and stars. Four: 160 thousand variants to train, 40 thousand kept hidden. Five: three models get the same data, a baseline that always says benign, logistic regression and a random forest. Six: five-fold cross-validation inside the training set. Seven: one final exam on the hidden 40 thousand. Eight: the winner scores the uncertain variants. The rules: same inputs, same split, a baseline to beat, and no input that already contains the answer.');
+tag(s, 'PYTHON NOTEBOOK'); title(s, 'Machine learning: how we trained and tested the models');
+const steps = [
+  ['Pick the answer', 'Keep variants labeled pathogenic (1) or benign (0). Uncertain ones are left out: their true answer is unknown.'],
+  ['Take a sample', '200,000 variants, with the same 21% pathogenic share as the full data.'],
+  ['Build the inputs', '38 numbers per variant: type, chromosome, length, labs, stars and year.'],
+  ['Split the data', '160,000 to train. 40,000 stay hidden for the final test.'],
+  ['Choose the models', 'Baseline (always benign), Logistic Regression and Random Forest, on the same data.'],
+  ['Cross-check', '5-fold cross-validation on the training data: a score and its spread for each model.'],
+  ['Final exam', 'Fit on all training data, then score once on the 40,000 unseen variants.'],
+  ['Apply', 'The winner scores the 2.4M uncertain (VUS) variants.']];
+steps.forEach(([h, d], i) => {
+  const x = 0.55 + (i % 4) * 2.28, y = i < 4 ? 1.85 : 3.3;
+  circleNum(s, x, y, 0.42, i + 1, [BLUE, CYAN, GREEN, NAVY][i % 4], 13);
+  T(s, h, { x: x + 0.55, y, w: 1.6, h: 0.42, fontSize: 11, bold: true, valign: 'middle' });
+  T(s, d, { x, y: y + 0.55, w: 2.1, h: 0.85, fontSize: 9.5, color: MUTE });
+});
+box(s, 0.55, 4.75, 8.9, 0.4, BLUE, 1.5);
+T(s, 'Fair-test rules: same inputs · same split · a baseline to beat · no input that already contains the answer', { x: 0.7, y: 4.75, w: 8.6, h: 0.4, fontSize: 10, bold: true, color: BLUE, valign: 'middle' });
+
 // ================= 15 ML CLASSIFICATION =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
 tag(s, 'PYTHON NOTEBOOK'); title(s, 'Machine learning: which model spots harmful variants?');
@@ -239,6 +262,54 @@ T(s, 'Winner', { x: 6.7, y: 1.9, w: 2.7, h: 0.25, fontSize: 10, bold: true, colo
 T(s, 'Random Forest', { x: 6.7, y: 2.15, w: 2.8, h: 0.45, fontSize: 20, bold: true, color: GREEN });
 T(s, 'AUC 0.812 vs. 0.779 for logistic regression; better in cross-validation too.', { x: 6.7, y: 2.65, w: 2.75, h: 0.7, fontSize: 10, color: MUTE });
 stat(s, 6.7, 3.5, 2.75, '60,497', 'uncertain variants (2.5%) score ≥ 0.8: candidates for expert review, not a diagnosis.', BLUE, 28);
+
+// ================= NEW B: WHY RANDOM FOREST WINS =================
+s = newSlide('WHITE', 'Part 2 · Data Cleaning', '[Presenter 2 · 0:35]\nWhy does the random forest win? On the left, the ROC curve: the closer a line gets to the top-left corner, the better, and the forest stays above logistic regression all the way, AUC 0.81 against 0.78. In the middle, what that means on the 40 thousand hidden variants: the forest finds 4,982 of the 8,362 pathogenic ones, about 60 percent, with 2,709 false alarms. Logistic regression finds 4,687. On the right, what the forest relies on: first the type of DNA change, then its length and the year of review. Single-letter changes point to benign, deletions to pathogenic, the same pattern as in our charts.');
+tag(s, 'PYTHON NOTEBOOK'); title(s, 'Machine learning: why the random forest wins');
+chart(s, pres.charts.SCATTER, [
+  { name: 'False positive rate', values: ROC.x },
+  { name: 'Random Forest (AUC 0.812)', values: ROC.rf },
+  { name: 'Logistic Regression (AUC 0.779)', values: ROC.lr },
+  { name: 'Random guess', values: ROC.x }],
+  { x: 0.45, y: 1.8, w: 3.45, h: 2.7, chartColors: [H.green, H.blue, H.grey], lineSize: 2.5, lineDataSymbol: 'none',
+    showLegend: false, valAxisMinVal: 0, valAxisMaxVal: 1, catAxisMinVal: 0, catAxisMaxVal: 1, valAxisLabelFormatCode: '0.0', catAxisLabelFormatCode: '0.0',
+    showCatAxisTitle: true, catAxisTitle: 'False positive rate', showValAxisTitle: true, valAxisTitle: 'True positive rate', catAxisTitleFontSize: 9, valAxisTitleFontSize: 9,
+    catAxisTitleColor: H.mute, valAxisTitleColor: H.mute, catAxisTitleFontFace: '+mn-lt', valAxisTitleFontFace: '+mn-lt',
+    showTitle: true, title: 'ROC curve (test set)', titleFontSize: 10, titleColor: H.mute, catGridLine: { color: H.grid, size: 0.75 } });
+T(s, 'Green: Random Forest (AUC 0.812) · Blue: Logistic Regression (AUC 0.779) · Grey: random guess', { x: 0.55, y: 4.5, w: 3.3, h: 0.4, fontSize: 8, color: MUTE });
+T(s, 'Random Forest · confusion matrix', { x: 4.15, y: 1.85, w: 2.5, h: 0.25, fontSize: 10, bold: true, color: MUTE });
+T(s, 'Predicted benign', { x: 4.95, y: 2.2, w: 0.8, h: 0.35, fontSize: 8, color: MUTE, align: 'center' });
+T(s, 'Predicted pathogenic', { x: 5.8, y: 2.2, w: 0.8, h: 0.35, fontSize: 8, color: MUTE, align: 'center' });
+[['True benign', 28929, 2709], ['True pathogenic', 3380, 4982]].forEach(([lab, a, b], r) => {
+  const y = 2.6 + r * 0.9;
+  T(s, lab, { x: 4.15, y, w: 0.75, h: 0.8, fontSize: 8, color: MUTE, align: 'right', valign: 'middle' });
+  [a, b].forEach((v, c) => {
+    const good = r === c;
+    s.addText(v.toLocaleString('en-US'), { x: 4.95 + c * 0.85, y, w: 0.8, h: 0.8, shape: S.rect, line: { color: good ? GREEN : MUTE, width: good ? 2.5 : 1 },
+      align: 'center', valign: 'middle', margin: 0, fontSize: 11, bold: true, color: good ? GREEN : MUTE });
+  });
+});
+T(s, 'Finds 4,982 of 8,362 pathogenic variants (60%). Logistic Regression finds 4,687 (56%).', { x: 4.15, y: 4.45, w: 2.5, h: 0.6, fontSize: 9, color: MUTE });
+const impNames = ['Single-letter change', 'Deletion', 'Length (log)', 'Year of review', 'Number of labs', 'Duplication', 'Review stars', 'Chromosome X', 'Indel', 'Microsatellite'];
+chart(s, pres.charts.BAR, [{ name: 'Importance', labels: impNames.slice().reverse(), values: IMP.slice().reverse() }],
+  { x: 6.75, y: 1.8, w: 2.8, h: 3.0, barDir: 'bar', chartColors: [H.cyan], showValue: true, dataLabelFormatCode: '0.00', dataLabelPosition: 'outEnd', dataLabelFontSize: 8, showLegend: false,
+    valAxisHidden: true, valGridLine: { style: 'none' }, valAxisMaxVal: 0.47, barGapWidthPct: 35, catAxisLabelFontSize: 8, showTitle: true, title: 'Inputs the forest relies on most', titleFontSize: 10, titleColor: H.mute });
+T(s, 'Both models learn the same story: the type and length of the DNA change matter most.', { x: 0.55, y: 4.9, w: 8.4, h: 0.25, fontSize: 9.5, italic: true, color: MUTE });
+
+// ================= NEW C: SCORING VUS + LIMITS =================
+s = newSlide('WHITE', 'Part 2 · Data Cleaning', '[Presenter 2 · 0:35]\nLast step of the classification: we ask the forest how much each uncertain variant looks like the pathogenic ones it learned from. Most score around 0.3, because they are single-letter changes that look like neither group. About 60 thousand, 2.5 percent, score 0.8 or higher: they look like known pathogenic variants and would be sensible candidates for expert review first. The limits: the model still misses about 40 percent of pathogenic variants, 3,380 in the test set, and our inputs describe what kind of change it is, not what it does to the protein. So this is a way to prioritise, not a diagnosis. Now the second comparison: predicting disagreement per gene.');
+tag(s, 'PYTHON NOTEBOOK'); title(s, 'Machine learning: scoring the uncertain variants');
+const nb = 33, hv = new Array(nb).fill(0), hl = [];
+for (let i = 0; i < nb; i++) hl.push((0.229 + i * 0.0215).toFixed(2));
+HIST.forEach(([c, k]) => { hv[Math.round((c - 0.229) / 0.0215)] = Math.round(k); });
+chart(s, pres.charts.BAR, [{ name: 'VUS variants (thousands)', labels: hl, values: hv }],
+  { x: 0.55, y: 1.8, w: 5.6, h: 3.3, barDir: 'col', chartColors: [H.cyan], showLegend: false, barGapWidthPct: 8, catAxisLabelFrequency: 4, valAxisLabelFormatCode: '#,##0"K"',
+    showCatAxisTitle: true, catAxisTitle: 'Predicted probability of being pathogenic', showValAxisTitle: true, valAxisTitle: 'Variants (thousands)', catAxisTitleFontSize: 9, valAxisTitleFontSize: 9,
+    catAxisTitleColor: H.mute, valAxisTitleColor: H.mute, catAxisTitleFontFace: '+mn-lt', valAxisTitleFontFace: '+mn-lt',
+    showTitle: true, title: 'Scores for 2.4M uncertain (VUS) variants', titleFontSize: 10, titleColor: H.mute });
+stat(s, 6.5, 1.85, 2.95, '≈ 60K', 'uncertain variants (2.5%) score ≥ 0.8: they look like known pathogenic ones, so expert review could start there.', BLUE, 30);
+T(s, 'Limits', { x: 6.5, y: 3.4, w: 2.95, h: 0.3, fontSize: 12, bold: true, color: INK });
+bullets(s, ['Still misses ~40% of pathogenic variants (3,380 of 8,362)', 'Inputs say what kind of change it is, not what it does to the protein', 'A way to prioritise, not a diagnosis'], { x: 6.5, y: 3.75, w: 2.95, h: 1.4, fontSize: 9.5 });
 
 // ================= 16 ML REGRESSION =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
