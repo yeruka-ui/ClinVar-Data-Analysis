@@ -1,53 +1,44 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
-<title>ClinVar Minimal Design</title>
+<title>ClinVar DNA Design Sample</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 :root{
-  --ink:#111111; --mute:#6B6B6B; --paper:#FFFFFF;
-  --blue:#2D5BFF; --pink:#FF3B6B; --yellow:#FFC400; --green:#00C98D; --violet:#7B4DFF;
+  --ink:#0A1F44; --mute:#5B6B88; --paper:#FFFFFF;
+  --blue:#1E4FFF; --cyan:#00B8E6; --teal:#00C2A8; --green:#1ED48A; --lime:#A8E63D; --navy:#0A2A8A;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#E9E9E9;font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:24px 0}
+body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:24px 0}
 .slide{width:960px;height:540px;margin:0 auto 24px;background:var(--paper);position:relative;overflow:hidden;padding:48px 56px}
-.slide h1{font-size:40px;font-weight:700;letter-spacing:-.5px;line-height:1.1}
+.slide h1{font-size:40px;font-weight:700;letter-spacing:-.5px;line-height:1.1;position:relative;z-index:2}
 .num{position:absolute;right:56px;bottom:28px;font-size:12px;color:var(--mute)}
 .solid{color:#fff}.solid .num{color:rgba(255,255,255,.8)}
-.bg-blue{background:var(--blue)}.bg-pink{background:var(--pink)}.bg-green{background:var(--green)}.bg-violet{background:var(--violet)}.bg-yellow{background:var(--yellow);color:var(--ink)}
-.cover h1,.divider h1{font-size:64px;max-width:760px;margin-top:150px}
-.cover p,.divider p{font-size:20px;margin-top:22px;opacity:.95}
-.divider .kick{font-size:16px;font-weight:700;letter-spacing:3px;margin-top:0;position:absolute;top:48px}
-.divider h1{margin-top:190px}
-.row{display:flex;gap:40px;margin-top:70px}
-.col{flex:1}
-.big{font-size:72px;font-weight:700;line-height:1}
+.bg-blue{background:var(--blue)}.bg-teal{background:var(--teal)}.bg-green{background:#12B873}.bg-navy{background:var(--navy)}
+.h{position:absolute;pointer-events:none}
+.cover h1,.divider h1{font-size:64px;max-width:760px;margin-top:90px}
+.cover p,.divider p{font-size:20px;margin-top:22px;position:relative;z-index:2}
+.divider .kick{font-size:16px;font-weight:700;letter-spacing:3px;position:absolute;top:48px;z-index:2}
+.divider h1{margin-top:110px}
+.big{font-size:60px;font-weight:700;line-height:1}
 .lab{font-size:15px;color:var(--mute);margin-top:8px;line-height:1.35}
-.h3{font-size:22px;font-weight:700;margin-top:16px}
-.c-blue{color:var(--blue)}.c-pink{color:var(--pink)}.c-yellow{color:#E0A800}.c-green{color:var(--green)}.c-violet{color:var(--violet)}
+.h3{font-size:22px;font-weight:700}
+.c-blue{color:var(--blue)}.c-cyan{color:#0097BD}.c-green{color:#0FA968}.c-navy{color:var(--navy)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:44px 64px;margin-top:44px}
-.grid2 .h3{margin-top:0;display:flex;align-items:center;gap:12px}
+.grid2 .h3{display:flex;align-items:center;gap:12px}
 .dot{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none}
-.grid2 p{font-size:15px;color:#333;margin-top:8px;line-height:1.4}
-.pills{display:flex;gap:12px;margin-top:34px}
+.grid2 p{font-size:15px;color:#2B3A57;margin-top:8px;line-height:1.4}
+.pills{display:flex;gap:12px;margin-top:14px}
 .pill{flex:1;border-radius:999px;padding:16px 10px;text-align:center;color:#fff;font-weight:700;font-size:18px}
-.pill.y{color:var(--ink)}
+.pill.d{color:var(--ink)}
 .sub{display:flex;gap:12px;margin-top:10px}.sub div{flex:1;text-align:center;font-size:13px;color:var(--mute)}
 .stars{display:flex;gap:12px;margin-top:20px}
 .stars div{flex:1;text-align:center}
 .stars b{display:block;width:44px;height:44px;border-radius:50%;margin:0 auto 8px;color:#fff;line-height:44px;font-size:18px}
 .stars span{font-size:13px;color:var(--mute)}
 .eyebrow{font-size:14px;font-weight:700;color:var(--mute);margin-top:34px}
-table{border-collapse:collapse;width:100%;margin-top:26px;font-size:14px}
-th{text-align:left;font-weight:700;color:var(--blue);padding:8px 10px;border-bottom:2px solid var(--ink)}
-td{padding:8px 10px;border-bottom:1px solid #E3E3E3}
 .chartwrap{display:flex;gap:56px;margin-top:34px;align-items:center}
-.bars{flex:1.5}
-.bar{display:flex;align-items:center;gap:12px;margin:12px 0;font-size:14px}
-.bar .n{width:200px;text-align:right;color:#333}
-.bar .t{height:26px;border-radius:4px}
-.bar .v{font-weight:700}
-.stat{margin-bottom:26px}.stat .big{font-size:60px}
-.donut{width:250px;height:250px;border-radius:50%;background:conic-gradient(var(--pink) 0 8.6%,var(--yellow) 8.6% 63.2%,var(--green) 63.2% 95.7%,var(--violet) 95.7% 99.9%,#CFCFCF 99.9% 100%);position:relative}
+.stat{margin-bottom:26px}
+.donut{width:250px;height:250px;border-radius:50%;background:conic-gradient(var(--blue) 0 8.6%,var(--cyan) 8.6% 63.2%,var(--green) 63.2% 95.7%,var(--lime) 95.7% 99.9%,#CBD5E6 99.9% 100%);position:relative;flex:none}
 .donut:after{content:"";position:absolute;inset:60px;background:#fff;border-radius:50%}
 .legend{font-size:14px;line-height:2}.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:10px}
 .cols{display:flex;gap:6px;align-items:flex-end;height:230px;margin-top:20px}
@@ -55,184 +46,121 @@ td{padding:8px 10px;border-bottom:1px solid #E3E3E3}
 .grp div{flex:1;border-radius:4px 4px 0 0}
 .glab{display:flex;gap:6px;margin-top:8px;font-size:13px;color:var(--mute)}.glab div{flex:1;text-align:center}
 .keys{display:flex;gap:14px;font-size:13px;color:var(--mute);margin-top:10px}.keys i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
-.code{background:#111;color:#E8E8E8;font-family:Consolas,monospace;font-size:13px;border-radius:12px;padding:18px 22px;margin-top:24px;line-height:1.5}
-.steps{display:flex;gap:28px;margin-top:40px}.steps>div{flex:1}.steps b{font-size:32px;display:block}
-.steps span{font-size:15px;color:var(--mute);display:block;margin-top:6px;line-height:1.35}
-.take{display:grid;grid-template-columns:1fr 1fr;gap:34px 64px;margin-top:40px}
-.take .h3{margin:0 0 6px}.take p{font-size:15px;color:#333;line-height:1.4}
-.why{position:absolute;left:56px;bottom:30px;font-size:14px;color:var(--mute);max-width:700px}
 .note{font-size:12px;color:var(--mute);margin:0 auto 6px;width:960px}
 </style></head><body>
+<p class="note">SAMPLE · 6 of 29 slides · blue + green DNA palette · helix motif · all 29 slides will be kept</p>
 
-<p class="note">Design preview · slide 1 of 29 types shown: cover, agenda, divider, terms, labels, table, chart, donut, ML chart, process+code, takeaways, close</p>
-
-<!-- 1 COVER -->
+<!-- COVER -->
 <section class="slide cover solid bg-blue">
+  <svg class="h" data-helix='{"w":960,"h":240,"n":3.2,"amp":70,"c1":"#FFFFFF","c2":"#A8E63D","dot":6,"op":0.95}' style="left:0;bottom:-70px"></svg>
   <h1>ClinVar: What 9 Million Genetic Records Tell Us</h1>
   <p>PTF10 Introduction to Data Science · Final Project</p>
 </section>
 
-<!-- 2 AGENDA -->
-<section class="slide">
-  <h1>Our project in four parts</h1>
-  <div class="row">
-    <div class="col"><div class="big c-blue">1</div><div class="h3">The Dataset</div><div class="lab">What ClinVar is, key terms, the columns we kept</div></div>
-    <div class="col"><div class="big c-pink">2</div><div class="h3">Python Notebook</div><div class="lab">Cleaning with pandas, then four machine-learning models</div></div>
-    <div class="col"><div class="big c-yellow">3</div><div class="h3">Power BI</div><div class="lab">The same cleaning in Power Query, one interactive dashboard</div></div>
-    <div class="col"><div class="big c-green">4</div><div class="h3">Insights</div><div class="lab">What the data shows, and what it means</div></div>
-  </div>
-  <div class="num">2</div>
-</section>
-
-<!-- 3 DIVIDER -->
-<section class="slide divider solid bg-pink">
+<!-- DIVIDER -->
+<section class="slide divider solid bg-teal">
   <div class="kick">PART 1</div>
+  <svg class="h" data-helix='{"w":960,"h":240,"n":3.2,"amp":70,"c1":"#FFFFFF","c2":"#0A2A8A","dot":6,"op":0.95,"phase":1.2}' style="left:0;bottom:-70px"></svg>
   <h1>The Dataset</h1>
   <p>What ClinVar is and what is inside it</p>
 </section>
 
-<!-- 4 TERMS -->
+<!-- TERMS -->
 <section class="slide">
+  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
   <h1>Four terms you need first</h1>
   <div class="grid2">
     <div><div class="h3"><span class="dot" style="background:var(--blue)"></span>DNA</div><p>The instruction manual in every cell, written in 4 letters: A, C, G, T.</p></div>
-    <div><div class="h3"><span class="dot" style="background:var(--pink)"></span>Gene</div><p>One section of DNA that tells the body how to make one part.</p></div>
-    <div><div class="h3"><span class="dot" style="background:var(--yellow)"></span>Variant</div><p>A change in the DNA letters, like a typo in a book. Some are harmless, some cause disease.</p></div>
-    <div><div class="h3"><span class="dot" style="background:var(--green)"></span>Genome build</div><p>A standard “map” of human DNA. GRCh37 is the old map, GRCh38 the new one.</p></div>
+    <div><div class="h3"><span class="dot" style="background:var(--cyan)"></span>Gene</div><p>One section of DNA that tells the body how to make one part.</p></div>
+    <div><div class="h3"><span class="dot" style="background:var(--green)"></span>Variant</div><p>A change in the DNA letters, like a typo in a book. Some are harmless, some cause disease.</p></div>
+    <div><div class="h3"><span class="dot" style="background:var(--lime)"></span>Genome build</div><p>A standard “map” of human DNA. GRCh37 is the old map, GRCh38 the new one.</p></div>
   </div>
   <div class="num">4</div>
 </section>
 
-<!-- 6 LABELS -->
+<!-- LABELS -->
 <section class="slide">
+  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
   <h1>How ClinVar labels a variant</h1>
   <div class="eyebrow">Clinical significance: the experts’ verdict</div>
-  <div class="pills" style="margin-top:14px">
-    <div class="pill" style="background:var(--pink)">P / LP</div>
-    <div class="pill y" style="background:var(--yellow)">VUS</div>
+  <div class="pills">
+    <div class="pill" style="background:var(--blue)">P / LP</div>
+    <div class="pill" style="background:var(--cyan)">VUS</div>
     <div class="pill" style="background:var(--green)">B / LB</div>
-    <div class="pill" style="background:var(--violet)">Conflicting</div>
+    <div class="pill d" style="background:var(--lime)">Conflicting</div>
   </div>
   <div class="sub"><div>Pathogenic · causes disease</div><div>Uncertain · not enough evidence</div><div>Benign · harmless</div><div>Labs disagree</div></div>
   <div class="eyebrow">Review status: how much to trust the label (0–4 stars)</div>
   <div class="stars">
-    <div><b style="background:#BDBDBD">0</b><span>No evidence</span></div>
-    <div><b style="background:var(--yellow);color:#111">1</b><span>One lab</span></div>
-    <div><b style="background:var(--blue)">2</b><span>Labs agree</span></div>
+    <div><b style="background:#B8C4D8">0</b><span>No evidence</span></div>
+    <div><b style="background:var(--cyan)">1</b><span>One lab</span></div>
+    <div><b style="background:var(--teal)">2</b><span>Labs agree</span></div>
     <div><b style="background:var(--green)">3</b><span>Expert panel</span></div>
-    <div><b style="background:#111">4</b><span>Guideline</span></div>
+    <div><b style="background:var(--navy)">4</b><span>Guideline</span></div>
   </div>
   <div class="num">6</div>
 </section>
 
-<!-- 7 TABLE -->
+<!-- ML CHART -->
 <section class="slide">
-  <h1>The 11 columns we used (of 43)</h1>
-  <table>
-    <tr><th>Column</th><th>What it holds</th><th>Example</th></tr>
-    <tr><td>VariationID</td><td>Unique ID of the variant</td><td>12375</td></tr>
-    <tr><td>GeneSymbol</td><td>Gene the variant is in</td><td>BRCA1</td></tr>
-    <tr><td>Type</td><td>Kind of DNA change</td><td>single nucleotide variant</td></tr>
-    <tr><td>ClinicalSignificance</td><td>The label</td><td>Likely pathogenic</td></tr>
-    <tr><td>ReviewStatus</td><td>How it was reviewed</td><td>reviewed by expert panel</td></tr>
-    <tr><td>NumberSubmitters</td><td>How many labs reported it</td><td>3</td></tr>
-    <tr><td>PhenotypeList</td><td>Linked condition(s)</td><td>Familial cancer of breast</td></tr>
-    <tr><td>Assembly / Chromosome / Start / Stop</td><td>Where it is on the DNA map</td><td>GRCh38 / 17 / 43045712</td></tr>
-    <tr><td>LastEvaluated</td><td>Date of the latest review</td><td>Mar 05, 2019</td></tr>
-  </table>
-  <div class="num">7</div>
-</section>
-
-<!-- 10 PROCESS + CODE -->
-<section class="slide">
-  <h1>Loading a file too big to open</h1>
-  <div class="steps">
-    <div><b class="c-blue">1</b><div class="h3" style="margin-top:6px">Download</div><span>wget from NCBI into Colab</span></div>
-    <div><b class="c-pink">2</b><div class="h3" style="margin-top:6px">Peek</div><span>Read 5 rows: 43 columns</span></div>
-    <div><b class="c-yellow">3</b><div class="h3" style="margin-top:6px">Read in chunks</div><span>500,000 rows at a time</span></div>
-    <div><b class="c-green">4</b><div class="h3" style="margin-top:6px">Filter</div><span>Keep only the newer map (GRCh38)</span></div>
-  </div>
-  <div class="code">for chunk in pd.read_csv(RAW_FILE, sep="\t", usecols=COLS, chunksize=500_000):<br>&nbsp;&nbsp;&nbsp;&nbsp;parts.append(chunk[chunk["Assembly"] == "GRCh38"])<br><br>Rows in the raw file: 9,354,555 &nbsp;|&nbsp; Rows kept (GRCh38): 4,643,623</div>
-  <div class="num">10</div>
-</section>
-
-<!-- 11 BAR CHART -->
-<section class="slide">
-  <h1>Cleaning cut the data in half</h1>
-  <div class="chartwrap">
-    <div class="bars">
-      <div class="eyebrow" style="margin:0 0 8px">Rows after each step</div>
-      <div class="bar"><div class="n">Rows in the file</div><div class="t" style="width:320px;background:#CFCFCF"></div><div class="v">9,354,555</div></div>
-      <div class="bar"><div class="n">Keep GRCh38 only</div><div class="t" style="width:159px;background:var(--blue)"></div><div class="v">4,643,623</div></div>
-      <div class="bar"><div class="n">After removing duplicates</div><div class="t" style="width:159px;background:var(--blue)"></div><div class="v">4,641,203</div></div>
-      <div class="bar"><div class="n">Has a germline label</div><div class="t" style="width:150px;background:var(--pink)"></div><div class="v">4,391,047</div></div>
-    </div>
-    <div style="flex:1">
-      <div class="stat"><div class="big c-pink">2×</div><div class="lab">Every variant appeared twice: once per DNA map</div></div>
-      <div class="stat"><div class="big c-blue">2,420</div><div class="lab">more exact duplicates removed</div></div>
-    </div>
-  </div>
-  <div class="num">11</div>
-</section>
-
-<!-- 15 ML COLUMN CHART -->
-<section class="slide">
+  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
   <h1>Which model spots harmful variants?</h1>
   <div class="chartwrap" style="align-items:flex-start">
     <div style="flex:1.6">
       <div class="eyebrow" style="margin:0">Test-set scores (40,000 unseen variants)</div>
       <div class="cols">
-        <div class="grp"><div style="height:50%;background:#CFCFCF"></div><div style="height:77.9%;background:var(--blue)"></div><div style="height:81.2%;background:var(--pink)"></div></div>
-        <div class="grp"><div style="height:79.1%;background:#CFCFCF"></div><div style="height:82.8%;background:var(--blue)"></div><div style="height:84.7%;background:var(--pink)"></div></div>
-        <div class="grp"><div style="height:1%;background:#CFCFCF"></div><div style="height:56.1%;background:var(--blue)"></div><div style="height:59.8%;background:var(--pink)"></div></div>
-        <div class="grp"><div style="height:1%;background:#CFCFCF"></div><div style="height:57.7%;background:var(--blue)"></div><div style="height:62%;background:var(--pink)"></div></div>
+        <div class="grp"><div style="height:50%;background:#CBD5E6"></div><div style="height:77.9%;background:var(--blue)"></div><div style="height:81.2%;background:var(--green)"></div></div>
+        <div class="grp"><div style="height:79.1%;background:#CBD5E6"></div><div style="height:82.8%;background:var(--blue)"></div><div style="height:84.7%;background:var(--green)"></div></div>
+        <div class="grp"><div style="height:1%;background:#CBD5E6"></div><div style="height:56.1%;background:var(--blue)"></div><div style="height:59.8%;background:var(--green)"></div></div>
+        <div class="grp"><div style="height:1%;background:#CBD5E6"></div><div style="height:57.7%;background:var(--blue)"></div><div style="height:62%;background:var(--green)"></div></div>
       </div>
       <div class="glab"><div>ROC-AUC</div><div>Accuracy</div><div>Recall</div><div>F1</div></div>
-      <div class="keys"><span><i style="background:#CFCFCF"></i>Baseline (always benign)</span><span><i style="background:var(--blue)"></i>Logistic Regression</span><span><i style="background:var(--pink)"></i>Random Forest</span></div>
+      <div class="keys"><span><i style="background:#CBD5E6"></i>Baseline (always benign)</span><span><i style="background:var(--blue)"></i>Logistic Regression</span><span><i style="background:var(--green)"></i>Random Forest</span></div>
     </div>
     <div style="flex:1">
-      <div class="stat"><div class="eyebrow" style="margin:0 0 4px">Winner</div><div class="h3 c-pink" style="font-size:32px;margin:0">Random Forest</div><div class="lab">AUC 0.812 vs. 0.779 for logistic regression</div></div>
+      <div class="stat"><div class="eyebrow" style="margin:0 0 4px">Winner</div><div class="h3 c-green" style="font-size:32px">Random Forest</div><div class="lab">AUC 0.812 vs. 0.779 for logistic regression</div></div>
       <div class="stat"><div class="big c-blue">60,497</div><div class="lab">uncertain variants (2.5%) score ≥ 0.8: candidates for expert review, not a diagnosis</div></div>
     </div>
   </div>
   <div class="num">15</div>
 </section>
 
-<!-- 22 DONUT -->
+<!-- DONUT -->
 <section class="slide">
+  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
   <h1>More than half is still “we don’t know”</h1>
   <div class="chartwrap" style="gap:48px">
     <div class="donut"></div>
     <div class="legend">
-      <div><i style="background:var(--pink)"></i>Pathogenic (P/LP) 8.6%</div>
-      <div><i style="background:var(--yellow)"></i>Uncertain (VUS) 54.6%</div>
+      <div><i style="background:var(--blue)"></i>Pathogenic (P/LP) 8.6%</div>
+      <div><i style="background:var(--cyan)"></i>Uncertain (VUS) 54.6%</div>
       <div><i style="background:var(--green)"></i>Benign (B/LB) 32.5%</div>
-      <div><i style="background:var(--violet)"></i>Conflicting 4.2%</div>
+      <div><i style="background:var(--lime)"></i>Conflicting 4.2%</div>
     </div>
     <div style="flex:1">
-      <div class="stat"><div class="big c-yellow">54.6%</div><div class="lab">are uncertain (VUS)</div></div>
-      <div class="stat"><div class="big c-pink">8.6%</div><div class="lab">are known to cause disease</div></div>
+      <div class="stat"><div class="big c-cyan">54.6%</div><div class="lab">are uncertain (VUS)</div></div>
+      <div class="stat"><div class="big c-blue">8.6%</div><div class="lab">are known to cause disease</div></div>
     </div>
   </div>
   <div class="num">22</div>
 </section>
 
-<!-- 28 TAKEAWAYS -->
-<section class="slide">
-  <h1>Key takeaways</h1>
-  <div class="take">
-    <div><div class="h3 c-yellow">55% unknown</div><p>Most variants are still uncertain, and that pile grows every year.</p></div>
-    <div><div class="h3 c-blue">Little double-checking</div><p>77% come from one lab; only 0.5% were expert-reviewed.</p></div>
-    <div><div class="h3 c-pink">Disagreement where it matters</div><p>BRCA1/2, the most-tested genes, have the most conflicts.</p></div>
-    <div><div class="h3 c-green">Cleaning was essential</div><p>Without it, every number would be doubled or wrong.</p></div>
-  </div>
-  <div class="why">Why it matters: clearer data means clearer test results for patients, better-aimed research, and knowing which labels to trust.</div>
-  <div class="num">28</div>
-</section>
-
-<!-- 29 CLOSE -->
-<section class="slide cover solid bg-blue">
-  <h1 style="margin-top:170px">Thank you! Questions?</h1>
-  <p style="font-size:15px;max-width:860px">Data: NCBI ClinVar, November 2026 release · Notebook: ClinVar_Final_Project.ipynb · Dashboard: Power BI<br>Patterns in a public database, not medical advice.</p>
-</section>
+<script>
+// Draws a double helix: two sine strands in opposite phase, joined by rungs
+document.querySelectorAll('svg[data-helix]').forEach(svg=>{
+  const o=JSON.parse(svg.dataset.helix), N=Math.round(o.w/11), ph=o.phase||0;
+  const rungCols=['#1E4FFF','#00B8E6','#1ED48A','#A8E63D'];
+  svg.setAttribute('width',o.w);svg.setAttribute('height',o.h);svg.setAttribute('viewBox',`0 0 ${o.w} ${o.h}`);
+  let rungs='',dots='',p1=[],p2=[];
+  for(let i=0;i<=N;i++){
+    const x=i*o.w/N,a=2*Math.PI*o.n*i/N+ph,s=Math.sin(a),c=Math.cos(a);
+    const y1=o.h/2+o.amp*s,y2=o.h/2-o.amp*s;
+    p1.push(x+','+y1);p2.push(x+','+y2);
+    rungs+=`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="${o.c1}" stroke-opacity="${.25*o.op}" stroke-width="2"/>`;
+    const r1=o.dot*(.65+.35*(c+1)/2),r2=o.dot*(.65+.35*(1-c)/2);
+    dots+=`<circle cx="${x}" cy="${y1}" r="${r1}" fill="${o.c1}" fill-opacity="${o.op}"/><circle cx="${x}" cy="${y2}" r="${r2}" fill="${o.c2}" fill-opacity="${o.op}"/>`;
+  }
+  svg.innerHTML=rungs+`<polyline points="${p1.join(' ')}" fill="none" stroke="${o.c1}" stroke-opacity="${.4*o.op}" stroke-width="2"/><polyline points="${p2.join(' ')}" fill="none" stroke="${o.c2}" stroke-opacity="${.4*o.op}" stroke-width="2"/>`+dots;
+});
+</script>
 </body></html>
