@@ -1,73 +1,82 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
-<title>ClinVar DNA Design Sample</title>
+<title>ClinVar DNA Design Sample v3</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-:root{
-  --ink:#0A1F44; --mute:#5B6B88; --paper:#FFFFFF;
-  --blue:#1E4FFF; --cyan:#00B8E6; --teal:#00C2A8; --green:#1ED48A; --lime:#A8E63D; --navy:#0A2A8A;
-}
+:root{--ink:#0A1F44;--mute:#5B6B88;--blue:#1E4FFF;--cyan:#00B8E6;--teal:#00C2A8;--green:#1ED48A;--lime:#A8E63D;--navy:#0A2A8A}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:24px 0}
-.slide{width:960px;height:540px;margin:0 auto 24px;background:var(--paper);position:relative;overflow:hidden;padding:48px 56px}
-.slide h1{font-size:40px;font-weight:700;letter-spacing:-.5px;line-height:1.1;position:relative;z-index:2}
+.slide{width:960px;height:540px;margin:0 auto 24px;background:#fff;position:relative;overflow:hidden;padding:48px 56px}
+.abs{position:absolute;left:0;top:0;pointer-events:none}
 .num{position:absolute;right:56px;bottom:28px;font-size:12px;color:var(--mute)}
-.solid{color:#fff}.solid .num{color:rgba(255,255,255,.8)}
-.bg-blue{background:var(--blue)}.bg-teal{background:var(--teal)}.bg-green{background:#12B873}.bg-navy{background:var(--navy)}
-.h{position:absolute;pointer-events:none}
-.cover h1,.divider h1{font-size:64px;max-width:760px;margin-top:90px}
-.cover p,.divider p{font-size:20px;margin-top:22px;position:relative;z-index:2}
-.divider .kick{font-size:16px;font-weight:700;letter-spacing:3px;position:absolute;top:48px;z-index:2}
-.divider h1{margin-top:110px}
+.tag{display:inline-block;background:var(--blue);color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;padding:7px 16px;border-radius:999px;position:relative;z-index:2}
+.slide h1{font-size:38px;font-weight:700;letter-spacing:-.5px;line-height:1.1;margin-top:16px;position:relative;z-index:2}
+/* dark slides */
+.dark{color:#fff}
+.g-cover{background:linear-gradient(135deg,#2B6BFF 0%,#0A2FC4 55%,#071A8C 100%)}
+.g-p1{background:linear-gradient(135deg,#2B6BFF 0%,#0A2A8A 100%)}
+.g-p2{background:linear-gradient(135deg,#00B8E6 0%,#1E4FFF 100%)}
+.g-p3{background:linear-gradient(135deg,#1ED48A 0%,#0A8FA8 100%)}
+.g-p4{background:linear-gradient(135deg,#0A2A8A 0%,#1E4FFF 100%)}
+.dark .tag{background:#fff;color:var(--blue)}
+.dark h1{font-size:54px;text-transform:uppercase;line-height:1.04;letter-spacing:-1px;max-width:500px;margin-top:0}
+.cover-text{position:absolute;left:56px;top:120px;z-index:2}
+.cover-text .sub{font-size:20px;font-weight:300;text-transform:uppercase;letter-spacing:2px;margin-top:20px;max-width:440px;line-height:1.3}
+.cover-text .tag{margin-top:34px}
+.divider h1{font-size:64px;max-width:480px}
+.ghost{position:absolute;left:46px;bottom:-30px;font-size:260px;font-weight:700;color:#fff;opacity:.12;line-height:1;z-index:1}
+/* content */
 .big{font-size:60px;font-weight:700;line-height:1}
 .lab{font-size:15px;color:var(--mute);margin-top:8px;line-height:1.35}
 .h3{font-size:22px;font-weight:700}
-.c-blue{color:var(--blue)}.c-cyan{color:#0097BD}.c-green{color:#0FA968}.c-navy{color:var(--navy)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:44px 64px;margin-top:44px}
+.c-blue{color:var(--blue)}.c-cyan{color:#0097BD}.c-green{color:#0FA968}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:40px 64px;margin-top:40px}
 .grid2 .h3{display:flex;align-items:center;gap:12px}
-.dot{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none}
+.dot{width:14px;height:14px;border-radius:50%;display:inline-block}
 .grid2 p{font-size:15px;color:#2B3A57;margin-top:8px;line-height:1.4}
+.eyebrow{font-size:14px;font-weight:700;color:var(--mute);margin-top:28px}
 .pills{display:flex;gap:12px;margin-top:14px}
 .pill{flex:1;border-radius:999px;padding:16px 10px;text-align:center;color:#fff;font-weight:700;font-size:18px}
-.pill.d{color:var(--ink)}
-.sub{display:flex;gap:12px;margin-top:10px}.sub div{flex:1;text-align:center;font-size:13px;color:var(--mute)}
-.stars{display:flex;gap:12px;margin-top:20px}
-.stars div{flex:1;text-align:center}
+.sub2{display:flex;gap:12px;margin-top:10px}.sub2 div{flex:1;text-align:center;font-size:13px;color:var(--mute)}
+.stars{display:flex;gap:12px;margin-top:18px}.stars div{flex:1;text-align:center}
 .stars b{display:block;width:44px;height:44px;border-radius:50%;margin:0 auto 8px;color:#fff;line-height:44px;font-size:18px}
 .stars span{font-size:13px;color:var(--mute)}
-.eyebrow{font-size:14px;font-weight:700;color:var(--mute);margin-top:34px}
-.chartwrap{display:flex;gap:56px;margin-top:34px;align-items:center}
-.stat{margin-bottom:26px}
-.donut{width:250px;height:250px;border-radius:50%;background:conic-gradient(var(--blue) 0 8.6%,var(--cyan) 8.6% 63.2%,var(--green) 63.2% 95.7%,var(--lime) 95.7% 99.9%,#CBD5E6 99.9% 100%);position:relative;flex:none}
-.donut:after{content:"";position:absolute;inset:60px;background:#fff;border-radius:50%}
+.chartwrap{display:flex;gap:56px;margin-top:30px;align-items:center}
+.stat{margin-bottom:24px}
+.donut{width:240px;height:240px;border-radius:50%;flex:none;position:relative;background:conic-gradient(var(--blue) 0 8.6%,var(--cyan) 8.6% 63.2%,var(--green) 63.2% 95.7%,var(--lime) 95.7% 99.9%,#CBD5E6 99.9% 100%)}
+.donut:after{content:"";position:absolute;inset:58px;background:#fff;border-radius:50%}
 .legend{font-size:14px;line-height:2}.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:10px}
-.cols{display:flex;gap:6px;align-items:flex-end;height:230px;margin-top:20px}
-.grp{flex:1;display:flex;gap:6px;align-items:flex-end;height:100%}
-.grp div{flex:1;border-radius:4px 4px 0 0}
+.cols{display:flex;gap:6px;align-items:flex-end;height:210px;margin-top:18px}
+.grp{flex:1;display:flex;gap:6px;align-items:flex-end;height:100%}.grp div{flex:1;border-radius:4px 4px 0 0}
 .glab{display:flex;gap:6px;margin-top:8px;font-size:13px;color:var(--mute)}.glab div{flex:1;text-align:center}
 .keys{display:flex;gap:14px;font-size:13px;color:var(--mute);margin-top:10px}.keys i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
 .note{font-size:12px;color:var(--mute);margin:0 auto 6px;width:960px}
 </style></head><body>
-<p class="note">SAMPLE · 6 of 29 slides · blue + green DNA palette · helix motif · all 29 slides will be kept</p>
+<svg width="0" height="0" style="position:absolute"><defs id="defs"></defs></svg>
+<p class="note">SAMPLE v3 · 6 of 29 slides · gradient blue/green · 3D double helix · hexagon outlines · pill tags · all 29 slides will be kept</p>
 
 <!-- COVER -->
-<section class="slide cover solid bg-blue">
-  <svg class="h" data-helix='{"w":960,"h":240,"n":3.2,"amp":70,"c1":"#FFFFFF","c2":"#A8E63D","dot":6,"op":0.95}' style="left:0;bottom:-70px"></svg>
-  <h1>ClinVar: What 9 Million Genetic Records Tell Us</h1>
-  <p>PTF10 Introduction to Data Science · Final Project</p>
+<section class="slide dark g-cover">
+  <svg class="abs hx" data-hex='[[640,40,38],[700,8,38],[580,8,38],[760,50,30]]' data-stroke="#fff" data-op=".45" width="960" height="540"></svg>
+  <div class="abs helix" data-h='{"L":1150,"H":270,"A":100,"turns":3.3,"step":9,"r":9,"cx":800,"cy":300,"rot":-38,"c1":["#1E4FFF","#1E4FFF","#7FC4FF","#FFFFFF","#00B8E6"],"c2":["#1ED48A","#1ED48A","#A8E63D","#FFFFFF","#00C2A8"],"rung":"#EAF3FF"}'></div>
+  <div class="cover-text">
+    <h1>ClinVar: What 9 Million Genetic Records Tell Us</h1>
+    <div class="sub">From raw dataset to cleaning to insights</div>
+    <span class="tag">PTF10 · INTRO TO DATA SCIENCE · FINAL PROJECT</span>
+  </div>
 </section>
 
 <!-- DIVIDER -->
-<section class="slide divider solid bg-teal">
-  <div class="kick">PART 1</div>
-  <svg class="h" data-helix='{"w":960,"h":240,"n":3.2,"amp":70,"c1":"#FFFFFF","c2":"#0A2A8A","dot":6,"op":0.95,"phase":1.2}' style="left:0;bottom:-70px"></svg>
-  <h1>The Dataset</h1>
-  <p>What ClinVar is and what is inside it</p>
+<section class="slide dark divider g-p1">
+  <svg class="abs hx" data-hex='[[690,36,34],[746,4,34],[634,4,34]]' data-stroke="#fff" data-op=".4" width="960" height="540"></svg>
+  <div class="abs helix" data-h='{"L":1000,"H":220,"A":80,"turns":2.8,"step":9,"r:":8,"r":8,"cx":810,"cy":330,"rot":-38,"c1":["#1E4FFF","#7FC4FF","#FFFFFF","#00B8E6"],"c2":["#1ED48A","#A8E63D","#FFFFFF","#00C2A8"],"rung":"#EAF3FF"}'></div>
+  <div class="cover-text" style="top:150px"><span class="tag" style="margin:0 0 22px">PART 1</span><h1>The Dataset</h1><div class="sub">What ClinVar is and what is inside it</div></div>
 </section>
 
 <!-- TERMS -->
 <section class="slide">
-  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
+  <svg class="abs hx" data-hex='[[830,34,34],[886,2,34],[774,2,34],[942,34,34]]' data-stroke="#1E4FFF" data-op=".14" width="960" height="540"></svg>
+  <span class="tag">THE DATASET</span>
   <h1>Four terms you need first</h1>
   <div class="grid2">
     <div><div class="h3"><span class="dot" style="background:var(--blue)"></span>DNA</div><p>The instruction manual in every cell, written in 4 letters: A, C, G, T.</p></div>
@@ -80,16 +89,17 @@ body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
 
 <!-- LABELS -->
 <section class="slide">
-  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
+  <svg class="abs hx" data-hex='[[830,34,34],[886,2,34],[774,2,34],[942,34,34]]' data-stroke="#1E4FFF" data-op=".14" width="960" height="540"></svg>
+  <span class="tag">THE DATASET</span>
   <h1>How ClinVar labels a variant</h1>
   <div class="eyebrow">Clinical significance: the experts’ verdict</div>
   <div class="pills">
     <div class="pill" style="background:var(--blue)">P / LP</div>
     <div class="pill" style="background:var(--cyan)">VUS</div>
     <div class="pill" style="background:var(--green)">B / LB</div>
-    <div class="pill d" style="background:var(--lime)">Conflicting</div>
+    <div class="pill" style="background:var(--lime);color:var(--ink)">Conflicting</div>
   </div>
-  <div class="sub"><div>Pathogenic · causes disease</div><div>Uncertain · not enough evidence</div><div>Benign · harmless</div><div>Labs disagree</div></div>
+  <div class="sub2"><div>Pathogenic · causes disease</div><div>Uncertain · not enough evidence</div><div>Benign · harmless</div><div>Labs disagree</div></div>
   <div class="eyebrow">Review status: how much to trust the label (0–4 stars)</div>
   <div class="stars">
     <div><b style="background:#B8C4D8">0</b><span>No evidence</span></div>
@@ -103,7 +113,8 @@ body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
 
 <!-- ML CHART -->
 <section class="slide">
-  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
+  <svg class="abs hx" data-hex='[[830,34,34],[886,2,34],[774,2,34],[942,34,34]]' data-stroke="#1E4FFF" data-op=".14" width="960" height="540"></svg>
+  <span class="tag">PYTHON NOTEBOOK</span>
   <h1>Which model spots harmful variants?</h1>
   <div class="chartwrap" style="align-items:flex-start">
     <div style="flex:1.6">
@@ -127,7 +138,8 @@ body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
 
 <!-- DONUT -->
 <section class="slide">
-  <svg class="h" data-helix='{"w":150,"h":44,"n":2.5,"amp":15,"c1":"#1E4FFF","c2":"#1ED48A","dot":3.4,"op":1}' style="left:56px;bottom:22px"></svg>
+  <svg class="abs hx" data-hex='[[830,34,34],[886,2,34],[774,2,34],[942,34,34]]' data-stroke="#1E4FFF" data-op=".14" width="960" height="540"></svg>
+  <span class="tag">INSIGHTS</span>
   <h1>More than half is still “we don’t know”</h1>
   <div class="chartwrap" style="gap:48px">
     <div class="donut"></div>
@@ -146,21 +158,31 @@ body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
 </section>
 
 <script>
-// Draws a double helix: two sine strands in opposite phase, joined by rungs
-document.querySelectorAll('svg[data-helix]').forEach(svg=>{
-  const o=JSON.parse(svg.dataset.helix), N=Math.round(o.w/11), ph=o.phase||0;
-  const rungCols=['#1E4FFF','#00B8E6','#1ED48A','#A8E63D'];
-  svg.setAttribute('width',o.w);svg.setAttribute('height',o.h);svg.setAttribute('viewBox',`0 0 ${o.w} ${o.h}`);
-  let rungs='',dots='',p1=[],p2=[];
-  for(let i=0;i<=N;i++){
-    const x=i*o.w/N,a=2*Math.PI*o.n*i/N+ph,s=Math.sin(a),c=Math.cos(a);
-    const y1=o.h/2+o.amp*s,y2=o.h/2-o.amp*s;
-    p1.push(x+','+y1);p2.push(x+','+y2);
-    rungs+=`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="${o.c1}" stroke-opacity="${.25*o.op}" stroke-width="2"/>`;
-    const r1=o.dot*(.65+.35*(c+1)/2),r2=o.dot*(.65+.35*(1-c)/2);
-    dots+=`<circle cx="${x}" cy="${y1}" r="${r1}" fill="${o.c1}" fill-opacity="${o.op}"/><circle cx="${x}" cy="${y2}" r="${r2}" fill="${o.c2}" fill-opacity="${o.op}"/>`;
+const defs=document.getElementById('defs'), made={};
+function bead(hex){ // shiny sphere gradient
+  if(made[hex])return 'url(#b'+made[hex]+')';
+  const id=hex.replace('#','');made[hex]=id;
+  defs.innerHTML+=`<radialGradient id="b${id}" cx=".35" cy=".32" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="${hex}"/><stop offset="1" stop-color="${hex}" stop-opacity=".78"/></radialGradient>`;
+  return 'url(#b'+id+')';
+}
+document.querySelectorAll('.helix').forEach(el=>{
+  const o=JSON.parse(el.dataset.h),n=Math.floor(o.L/o.step),items=[];
+  for(let i=0;i<=n;i++){
+    const x=o.r+i*o.step,a=2*Math.PI*o.turns*i/n,s=Math.sin(a),c=Math.cos(a);
+    const y1=o.H/2+o.A*s,y2=o.H/2-o.A*s;
+    items.push({z:c,svg:`<circle cx="${x}" cy="${y1}" r="${o.r*(.75+.25*c)}" fill="${bead(o.c1[i%o.c1.length])}"/>`});
+    items.push({z:-c,svg:`<circle cx="${x}" cy="${y2}" r="${o.r*(.75-.25*c)}" fill="${bead(o.c2[i%o.c2.length])}"/>`});
+    if(i%3===0)items.push({z:0,svg:`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="${o.rung}" stroke-width="3.5" stroke-linecap="round" stroke-opacity=".9"/>`});
   }
-  svg.innerHTML=rungs+`<polyline points="${p1.join(' ')}" fill="none" stroke="${o.c1}" stroke-opacity="${.4*o.op}" stroke-width="2"/><polyline points="${p2.join(' ')}" fill="none" stroke="${o.c2}" stroke-opacity="${.4*o.op}" stroke-width="2"/>`+dots;
+  items.sort((p,q)=>p.z-q.z);
+  el.style.cssText=`left:${o.cx-o.L/2}px;top:${o.cy-o.H/2}px;width:${o.L}px;height:${o.H}px;transform:rotate(${o.rot}deg);transform-origin:center`;
+  el.innerHTML=`<svg width="${o.L}" height="${o.H}" viewBox="0 0 ${o.L} ${o.H}">${items.map(t=>t.svg).join('')}</svg>`;
+});
+document.querySelectorAll('svg.hx').forEach(svg=>{
+  const hexes=JSON.parse(svg.dataset.hex);
+  svg.innerHTML=hexes.map(([cx,cy,r])=>{
+    const p=[0,1,2,3,4,5].map(k=>{const t=Math.PI/3*k+Math.PI/6;return(cx+r*Math.cos(t)).toFixed(1)+','+(cy+r*Math.sin(t)).toFixed(1)}).join(' ');
+    return `<polygon points="${p}" fill="none" stroke="${svg.dataset.stroke}" stroke-opacity="${svg.dataset.op}" stroke-width="1.5"/>`}).join('');
 });
 </script>
 </body></html>
