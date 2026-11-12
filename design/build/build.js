@@ -16,6 +16,8 @@ const THEME = { name: 'ClinVar DNA', headFontFace: 'Montserrat', bodyFontFace: '
 // hex copies for chart options (charts need hex)
 const H = { blue:'1E4FFF', cyan:'00A6D6', green:'12B873', lime:'A8E63D', navy:'0A2A8A', mute:'5B6B88', grey:'CBD5E6', grid:'E3E9F4' };
 
+const FLAG = (k) => !!process.env[k];
+const OUT = process.env.OUT || 'ClinVar_Full_Presentation_DNA.pptx';
 const pres = new pptxgen();
 pres.layout = 'LAYOUT_16x9';           // 10 x 5.625 in
 pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
@@ -35,8 +37,14 @@ pres.defineSlideMaster({ title: 'BLUE_B', background: { color: '0A2A8A' } });
 // ---------- helpers ----------
 let n = 0, origN = 0, curDark = false;
 const BGFILE = { COVER: 'cover', DIV1: 'div1', DIV2: 'div2', DIV3: 'div3', DIV4: 'div4', WHITE: 'white', BLUE_A: 'blueA', BLUE_B: 'blueB' };
+const _addSection = pres.addSection.bind(pres);
+pres.addSection = (o) => { if (!FLAG('NOSECT')) _addSection(o); };
 function newSlide(master, section, note) {
-  const s = pres.addSlide({ masterName: master, sectionTitle: section });
+  const opts = { masterName: master }; if (!FLAG('NOSECT')) opts.sectionTitle = section;
+  const s = pres.addSlide(opts);
+  if (FLAG('NOIMG')) s.addImage = () => s;
+  if (FLAG('NOCHART')) s.addChart = () => s;
+  if (FLAG('NONOTES')) s.addNotes = () => s;
   s.addImage({ path: 'bg_' + BGFILE[master] + '.jpg', x: 0, y: 0, w: 10, h: 5.625, altText: 'Decorative background', objectName: 'Background' });
   s.addNotes(NOTES33[n] || ''); n++;
   curDark = master.startsWith('BLUE') || master.startsWith('DIV');
@@ -473,7 +481,7 @@ T(s, 'Data: NCBI ClinVar, November 2026 release · Notebook: ClinVar_Final_Proje
 T(s, 'Patterns in a public database, not medical advice.', { x: 0.55, y: 4.45, w: 5.6, h: 0.3, fontSize: 10, color: WHITE });
 
 (async () => {
-  await pres.writeFile({ fileName: 'ClinVar_Full_Presentation_DNA.pptx' });
-  await applyTheme('ClinVar_Full_Presentation_DNA.pptx', THEME);
+  await pres.writeFile({ fileName: OUT });
+  if (!FLAG('NOTHEME')) await applyTheme(OUT, THEME);
   console.log('done', n, 'slides');
 })();
