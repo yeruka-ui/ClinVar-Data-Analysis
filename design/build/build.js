@@ -20,21 +20,24 @@ const INK = C.text1, MUTE = C.accent6, WHITE = C.background1;
 const BLUE = C.accent1, CYAN = C.accent2, GREEN = C.accent3, LIME = C.accent4, NAVY = C.accent5;
 
 // ---------- layouts ----------
-const num = (color) => ({ x: 9.0, y: 5.2, w: 0.45, h: 0.25, fontSize: 10, color, align: 'right', margin: 0 });
-const titlePh = (color) => ({ placeholder: { options: { name: 'title', type: 'title', x: 0.55, y: 0.8, w: 8.6, h: 0.95,
-  fontSize: 24, bold: true, color, align: 'left', valign: 'top', margin: 0 }, text: '' } });
 pres.defineSlideMaster({ title: 'COVER', background: { path: 'bg_cover.png' } });
 for (const k of [1, 2, 3, 4]) pres.defineSlideMaster({ title: 'DIV' + k, background: { path: `bg_div${k}.png` } });
-pres.defineSlideMaster({ title: 'WHITE', background: { path: 'bg_white.png' }, slideNumber: num(MUTE), objects: [titlePh(INK)] });
-pres.defineSlideMaster({ title: 'BLUE_A', background: { path: 'bg_blueA.png' }, slideNumber: num(WHITE), objects: [titlePh(WHITE)] });
-pres.defineSlideMaster({ title: 'BLUE_B', background: { path: 'bg_blueB.png' }, slideNumber: num(WHITE), objects: [titlePh(WHITE)] });
+pres.defineSlideMaster({ title: 'WHITE', background: { path: 'bg_white.png' } });
+pres.defineSlideMaster({ title: 'BLUE_A', background: { path: 'bg_blueA.png' } });
+pres.defineSlideMaster({ title: 'BLUE_B', background: { path: 'bg_blueB.png' } });
 
 // ---------- helpers ----------
-let n = 0;
+let n = 0, curDark = false;
 function newSlide(master, section, noteText) {
   const s = pres.addSlide({ masterName: master, sectionTitle: section });
-  s.addNotes(notes[n] || ''); n++; return s;
+  s.addNotes(notes[n] || ''); n++;
+  curDark = master.startsWith('BLUE') || master.startsWith('DIV');
+  if (master === 'WHITE' || master.startsWith('BLUE'))
+    s.addText(String(n), { isTextBox: true, x: 9.0, y: 5.2, w: 0.45, h: 0.25, fontSize: 10, color: curDark ? WHITE : MUTE, align: 'right', margin: 0, objectName: 'Slide number' });
+  return s;
 }
+const title = (s, text) => s.addText(text, { isTextBox: true, x: 0.55, y: 0.8, w: 8.6, h: 0.95, fontSize: 24, bold: true, color: curDark ? WHITE : INK,
+  align: 'left', valign: 'top', margin: 0, objectName: 'Title' });
 const T = (s, text, o) => s.addText(text, Object.assign({ isTextBox: true, margin: 0, color: INK, fontSize: 12, valign: 'top' }, o));
 function tag(s, text, dark) {                        // outlined label, square corners
   const w = 0.4 + text.length * 0.098;
@@ -79,7 +82,7 @@ s.addText('PTF10 · INTRO TO DATA SCIENCE · FINAL PROJECT', { isTextBox: true, 
 
 // ================= 2 AGENDA (blue) =================
 s = newSlide('BLUE_A', 'Introduction');
-tag(s, 'OVERVIEW', true); s.addText('Our project in four parts', { placeholder: 'title' });
+tag(s, 'OVERVIEW', true); title(s, 'Our project in four parts');
 [['The Dataset', 'What ClinVar is, key terms, the columns we kept'], ['Python Notebook', 'Cleaning with pandas, then comparing four machine-learning models'],
  ['Power BI', 'The same cleaning in Power Query, one interactive dashboard'], ['Insights', 'What the data shows, and what it means']].forEach(([h, d], i) => {
   const x = 0.55 + i * 2.28;
@@ -102,7 +105,7 @@ divider(1, 'PART 1', 'THE DATASET', 'What ClinVar is and what is inside it', 'Pa
 
 // ================= 4 TERMS =================
 s = newSlide('WHITE', 'Part 1 · The Dataset');
-tag(s, 'THE DATASET'); s.addText('Four terms you need first', { placeholder: 'title' });
+tag(s, 'THE DATASET'); title(s, 'Four terms you need first');
 [['D', 'DNA', 'The instruction manual in every cell, written in 4 letters: A, C, G, T.'], ['G', 'Gene', 'One section of DNA that tells the body how to make one part.'],
  ['V', 'Variant', 'A change in the DNA letters, like a typo in a book. Some are harmless, some cause disease.'], ['B', 'Genome build', 'A standard “map” of human DNA. GRCh37 is the old map, GRCh38 the new one.']].forEach(([l, h, d], i) => {
   const x = i % 2 ? 5.15 : 0.55, y = i < 2 ? 2.0 : 3.65;
@@ -113,7 +116,7 @@ tag(s, 'THE DATASET'); s.addText('Four terms you need first', { placeholder: 'ti
 
 // ================= 5 ARCHIVE =================
 s = newSlide('WHITE', 'Part 1 · The Dataset');
-tag(s, 'THE DATASET'); s.addText('ClinVar: the world’s public variant archive', { placeholder: 'title' });
+tag(s, 'THE DATASET'); title(s, 'ClinVar: the world’s public variant archive');
 bullets(s, ['Run by NCBI, part of the U.S. National Institutes of Health', 'Labs and experts share what each variant does to health',
   'Free download: variant_summary.txt.gz (tab-separated)', 'We used the November 2026 release'], { x: 0.55, y: 2.0, w: 4.5, h: 2.9, fontSize: 12.5 });
 [['9.35M', 'rows in the raw file', BLUE], ['43', 'columns', CYAN], ['440 MB', 'compressed file size', GREEN], ['30K+', 'genes covered', NAVY]].forEach(([v, l, c], i) => {
@@ -125,7 +128,7 @@ bullets(s, ['Run by NCBI, part of the U.S. National Institutes of Health', 'Labs
 
 // ================= 6 LABELS =================
 s = newSlide('WHITE', 'Part 1 · The Dataset');
-tag(s, 'THE DATASET'); s.addText('How ClinVar labels a variant', { placeholder: 'title' });
+tag(s, 'THE DATASET'); title(s, 'How ClinVar labels a variant');
 T(s, 'Clinical significance: the experts’ verdict', { x: 0.55, y: 1.85, w: 8, h: 0.3, fontSize: 11, bold: true, color: MUTE });
 [['P / LP', 'Pathogenic · causes disease', BLUE, BLUE], ['VUS', 'Uncertain · not enough evidence', CYAN, CYAN], ['B / LB', 'Benign · harmless', GREEN, GREEN],
  ['Conflicting', 'Labs disagree · different verdicts', LIME, INK]].forEach(([t, d, line, txt], i) => {
@@ -147,7 +150,7 @@ function table(s, rows, colW, y, fs) {
   s.addTable(data, { x: 0.55, y, w: colW.reduce((a, b2) => a + b2, 0), colW, rowH: 0.3 });
 }
 s = newSlide('WHITE', 'Part 1 · The Dataset');
-tag(s, 'THE DATASET'); s.addText('The 11 columns we used (of 43)', { placeholder: 'title' });
+tag(s, 'THE DATASET'); title(s, 'The 11 columns we used (of 43)');
 table(s, [['Column', 'What it holds', 'Example'], ['VariationID', 'Unique ID of the variant', '12375'], ['GeneSymbol', 'Gene the variant is in', 'BRCA1'],
   ['Type', 'Kind of DNA change', 'single nucleotide variant'], ['ClinicalSignificance', 'The label', 'Likely pathogenic'], ['ReviewStatus', 'How it was reviewed', 'reviewed by expert panel'],
   ['NumberSubmitters', 'How many labs reported it', '3'], ['PhenotypeList', 'Linked condition(s)', 'Familial cancer of breast'],
@@ -155,7 +158,7 @@ table(s, [['Column', 'What it holds', 'Example'], ['VariationID', 'Unique ID of 
 
 // ================= 8 QUESTIONS (blue) =================
 s = newSlide('BLUE_B', 'Part 1 · The Dataset');
-tag(s, 'OVERVIEW', true); s.addText('Our questions, and what we don’t do', { placeholder: 'title' });
+tag(s, 'OVERVIEW', true); title(s, 'Our questions, and what we don’t do');
 ['How much do we actually know about variants?', 'How much can we trust the labels?', 'Where do experts disagree?', 'Which genes and changes matter most?'].forEach((q, i) => {
   const y = 1.95 + i * 0.8;
   circleNum(s, 0.55, y, 0.5, i + 1, WHITE, 14);
@@ -171,7 +174,7 @@ divider(2, 'PART 2', 'DATA CLEANING', 'Turning 9.35 million messy rows into data
 
 // ================= 10 LOADING =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
-tag(s, 'DATA CLEANING'); s.addText('Loading a file too big to open', { placeholder: 'title' });
+tag(s, 'DATA CLEANING'); title(s, 'Loading a file too big to open');
 [['Download', 'wget from NCBI into Colab'], ['Peek', 'Read 5 rows: 43 columns'], ['Read in chunks', '500,000 rows at a time; peak memory 3.7 of 12 GB'], ['Filter', 'Keep only the newer map (GRCh38)']].forEach(([h, d], i) => {
   const x = 0.55 + i * 2.28;
   circleNum(s, x, 1.85, 0.45, i + 1, [BLUE, CYAN, GREEN, NAVY][i], 14);
@@ -182,7 +185,7 @@ img(s, 'image-10-1.png', 0.55, 3.15, 7.6, 990 / 253);
 
 // ================= 11 CHEAP HALF =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
-tag(s, 'DATA CLEANING'); s.addText('Cleaning cut the data in half', { placeholder: 'title' });
+tag(s, 'DATA CLEANING'); title(s, 'Cleaning cut the data in half');
 chart(s, pres.charts.BAR, [{ name: 'Rows', labels: ['Has a germline label', 'After removing duplicates', 'Keep GRCh38 only', 'Rows in the file'], values: [4391047, 4641203, 4643623, 9354555] }],
   { x: 0.55, y: 1.75, w: 5.6, h: 2.15, barDir: 'bar', chartColors: [H.blue], showValue: true, dataLabelFormatCode: '#,##0', dataLabelPosition: 'outEnd', showLegend: false,
     valAxisHidden: true, valGridLine: { style: 'none' }, barGapWidthPct: 45, showTitle: true, title: 'Rows after each step', titleFontSize: 11, titleColor: H.mute });
@@ -191,7 +194,7 @@ img(s, 'image-11-1.png', 0.55, 4.05, 7.8, 902 / 135);
 
 // ================= 12 MISSING =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
-tag(s, 'DATA CLEANING'); s.addText('Missing data hides behind codes', { placeholder: 'title' });
+tag(s, 'DATA CLEANING'); title(s, 'Missing data hides behind codes');
 chart(s, pres.charts.BAR, [{ name: '% missing', labels: ['Gene', 'Review status', 'Label', 'Review date', 'Condition'], values: [0.0, 5.2, 5.4, 6.0, 45.0] }],
   { x: 0.55, y: 1.75, w: 5.4, h: 2.1, barDir: 'bar', chartColors: [H.blue], showValue: true, dataLabelFormatCode: '0.0"%"', dataLabelPosition: 'outEnd', showLegend: false,
     valAxisHidden: true, valGridLine: { style: 'none' }, barGapWidthPct: 45, valAxisMaxVal: 55, showTitle: true, title: '% of rows missing after replacing the codes', titleFontSize: 11, titleColor: H.mute });
@@ -200,7 +203,7 @@ img(s, 'image-12-1.png', 0.55, 4.0, 7.4, 890 / 158);
 
 // ================= 13 LABEL SPELLINGS =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
-tag(s, 'DATA CLEANING'); s.addText('104 label spellings, grouped into 5', { placeholder: 'title' });
+tag(s, 'DATA CLEANING'); title(s, '104 label spellings, grouped into 5');
 chart(s, pres.charts.BAR, [{ name: 'Spellings', labels: ['P/LP', 'VUS', 'B/LB', 'Conflicting', 'Other'], values: [35, 15, 22, 11, 21] }],
   { x: 0.55, y: 1.75, w: 4.7, h: 3.2, barDir: 'col', chartColors: [H.blue, H.cyan, H.green, H.lime, H.grey], showValue: true, dataLabelPosition: 'outEnd', showLegend: false,
     valAxisHidden: true, valGridLine: { style: 'none' }, barGapWidthPct: 40, showTitle: true, title: 'Different spellings per group', titleFontSize: 11, titleColor: H.mute });
@@ -211,7 +214,7 @@ T(s, 'Review-status text became a 0–4 star score the same way.', { x: 5.55, y:
 
 // ================= 14 OUTLIERS (blue) =================
 s = newSlide('BLUE_A', 'Part 2 · Data Cleaning');
-tag(s, 'DATA CLEANING', true); s.addText('Outliers and data types', { placeholder: 'title' });
+tag(s, 'DATA CLEANING', true); title(s, 'Outliers and data types');
 [['Fake dates', '111 review dates before 1990 (oldest: 1965). ClinVar began in 2013.', 'Set to missing', LIME],
  ['Many submitters', 'The IQR rule flags 22.5% of rows, but popular variants really do get many labs.', 'Kept: real data', LIME],
  ['Huge variants', 'A few span up to 159 million DNA letters and squash the charts.', 'Top 0.1% left out of length chart', LIME]].forEach(([h, d, dec], i) => {
@@ -225,7 +228,7 @@ T(s, 'Data types: all text at load → numbers (positions, submitters), real dat
 
 // ================= 15 ML CLASSIFICATION =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
-tag(s, 'PYTHON NOTEBOOK'); s.addText('Machine learning: which model spots harmful variants?', { placeholder: 'title' });
+tag(s, 'PYTHON NOTEBOOK'); title(s, 'Machine learning: which model spots harmful variants?');
 chart(s, pres.charts.BAR, [
   { name: 'Baseline (always benign)', labels: ['ROC-AUC', 'Accuracy', 'Recall (pathogenic)', 'F1 (pathogenic)'], values: [0.5, 0.791, 0, 0] },
   { name: 'Logistic Regression', labels: ['ROC-AUC', 'Accuracy', 'Recall (pathogenic)', 'F1 (pathogenic)'], values: [0.779, 0.828, 0.561, 0.577] },
@@ -239,7 +242,7 @@ stat(s, 6.7, 3.5, 2.75, '60,497', 'uncertain variants (2.5%) score ≥ 0.8: cand
 
 // ================= 16 ML REGRESSION =================
 s = newSlide('WHITE', 'Part 2 · Data Cleaning');
-tag(s, 'PYTHON NOTEBOOK'); s.addText('Machine learning: predicting disagreement per gene', { placeholder: 'title' });
+tag(s, 'PYTHON NOTEBOOK'); title(s, 'Machine learning: predicting disagreement per gene');
 const regCats = ['Baseline (average)', 'Linear Regression', 'Random Forest'];
 chart(s, pres.charts.BAR, [{ name: 'R²', labels: regCats, values: [0, 0.723, 0.725] }],
   { x: 0.55, y: 1.8, w: 3.05, h: 3.3, barDir: 'col', chartColors: [H.grey, H.blue, H.green], showValue: true, dataLabelFormatCode: '0.000', dataLabelPosition: 'outEnd', showLegend: false, valAxisHidden: true,
@@ -258,7 +261,7 @@ divider(3, 'PART 3', 'THE POWER BI VERSION', 'The same cleaning in Power Query, 
 
 // ================= 18 POWER BI LOADING =================
 s = newSlide('WHITE', 'Part 3 · Power BI');
-tag(s, 'POWER BI'); s.addText('Loading 4.6 million rows into Power BI', { placeholder: 'title' });
+tag(s, 'POWER BI'); title(s, 'Loading 4.6 million rows into Power BI');
 [['Get Data', 'Folder → 21 .txt parts'], ['Parse', 'Tab-separated, QuoteStyle.None'], ['Headers', 'First row → headers, once per file'], ['Combine', 'Stack into one table'], ['Choose columns', 'Keep 12 of 43']].forEach(([h, d], i) => {
   const x = 0.55 + i * 1.8;
   circleNum(s, x, 2.1, 0.55, i + 1, [BLUE, CYAN, GREEN, NAVY, BLUE][i], 16);
@@ -269,7 +272,7 @@ T(s, 'Every step is recorded in Power Query’s Applied Steps, so the whole clea
 
 // ================= 19 TWO TOOLS =================
 s = newSlide('WHITE', 'Part 3 · Power BI');
-tag(s, 'POWER BI'); s.addText('Same cleaning, two tools', { placeholder: 'title' });
+tag(s, 'POWER BI'); title(s, 'Same cleaning, two tools');
 table(s, [['Step', 'Python (pandas)', 'Power BI (Power Query + DAX)'], ['Load', 'read_csv in chunks of 500K rows', 'Get Data → Folder, 21 parts'], ['Duplicates', 'drop_duplicates(VariationID)', 'Remove Duplicates'],
   ['Missing codes', 'replace(codes, NaN)', 'One replace step, whole cells only'], ['Data types', 'to_numeric · to_datetime', 'Change Type (dates read as English, US)'],
   ['Outliers', 'Dates < 1990 · IQR · 99.9th pct', 'DatePlaceholder flag · DAX measures'], ['Label groups', 'sig_group() and stars() functions', 'Custom columns Group and Stars'],
@@ -277,7 +280,7 @@ table(s, [['Step', 'Python (pandas)', 'Power BI (Power Query + DAX)'], ['Load', 
 
 // ================= 20 LIVE DEMO (blue) =================
 s = newSlide('BLUE_B', 'Part 3 · Power BI');
-tag(s, 'POWER BI', true); s.addText('Live demo: the dashboard reacts', { placeholder: 'title' });
+tag(s, 'POWER BI', true); title(s, 'Live demo: the dashboard reacts');
 [['Tick “P/LP”', 'Clinical significance slicer: only harmful variants remain'], ['Pick chromosome 17', 'BRCA1 climbs in the Top 10 genes chart'],
  ['Year range 2023–2025', 'KPIs and charts show recent reviews only'], ['Click the Deletion bar', 'Every other visual filters to deletions']].forEach(([h, d], i) => {
   const x = i % 2 ? 5.15 : 0.55, y = i < 2 ? 1.95 : 3.3;
@@ -293,7 +296,7 @@ divider(4, 'PART 4', 'ANALYSIS & INSIGHTS', 'What the clean data shows', 'Part 4
 
 // ================= 22 BUBBLES =================
 s = newSlide('WHITE', 'Part 4 · Analysis & Insights');
-tag(s, 'INSIGHTS'); s.addText('More than half is still “we don’t know”', { placeholder: 'title' });
+tag(s, 'INSIGHTS'); title(s, 'More than half is still “we don’t know”');
 T(s, '4.39M labeled variants (circle area = share)', { x: 0.55, y: 1.85, w: 6, h: 0.3, fontSize: 11, bold: true, color: MUTE });
 const bub = [['54.6%', 'Uncertain (VUS)', 2.6, 0.55, CYAN, 28, CYAN], ['32.5%', 'Benign (B/LB)', 2.0, 3.35, GREEN, 22, GREEN], ['8.6%', 'Pathogenic (P/LP)', 1.05, 5.55, BLUE, 13, BLUE], ['4.2%', 'Conflicting', 0.72, 6.75, LIME, 10, INK]];
 bub.forEach(([v, name, d, x, c, fs, tc]) => {
@@ -306,7 +309,7 @@ stat(s, 7.7, 3.5, 1.8, '8.6%', 'are known to cause disease', BLUE, 26);
 
 // ================= 23 LINE =================
 s = newSlide('WHITE', 'Part 4 · Analysis & Insights');
-tag(s, 'INSIGHTS'); s.addText('Unknowns are growing faster than answers', { placeholder: 'title' });
+tag(s, 'INSIGHTS'); title(s, 'Unknowns are growing faster than answers');
 const yrs = ['2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
 chart(s, pres.charts.LINE, [
   { name: 'Pathogenic (P/LP)', labels: yrs, values: [1510,3568,2284,2908,9489,9351,10187,14593,13944,21878,38378,52344,66791,72708] },
@@ -320,7 +323,7 @@ stat(s, 7.3, 3.5, 2.2, '877K', 'uncertain results in 2025 alone', CYAN, 30);
 
 // ================= 24 STARS =================
 s = newSlide('WHITE', 'Part 4 · Analysis & Insights');
-tag(s, 'INSIGHTS'); s.addText('Most labels rest on one lab’s opinion', { placeholder: 'title' });
+tag(s, 'INSIGHTS'); title(s, 'Most labels rest on one lab’s opinion');
 chart(s, pres.charts.BAR, [{ name: '% of variants', labels: ['0 stars', '1 star', '2 stars', '3 stars', '4 stars'], values: [5.4, 77.6, 16.5, 0.5, 0.0] }],
   { x: 0.55, y: 1.75, w: 6.2, h: 3.35, barDir: 'col', chartColors: [H.grey, H.cyan, H.green, H.blue, H.navy], showValue: true, dataLabelFormatCode: '0.0"%"', dataLabelPosition: 'outEnd', showLegend: false,
     valAxisHidden: true, valGridLine: { style: 'none' }, valAxisMaxVal: 90, barGapWidthPct: 40, showTitle: true, title: 'Review status (trust stars)', titleFontSize: 11, titleColor: H.mute });
@@ -329,7 +332,7 @@ stat(s, 7.2, 3.5, 2.3, '0.5%', 'checked by an expert panel', BLUE, 30);
 
 // ================= 25 GENES CONFLICT =================
 s = newSlide('WHITE', 'Part 4 · Analysis & Insights');
-tag(s, 'INSIGHTS'); s.addText('Experts disagree most on breast-cancer genes', { placeholder: 'title' });
+tag(s, 'INSIGHTS'); title(s, 'Experts disagree most on breast-cancer genes');
 chart(s, pres.charts.BAR, [{ name: '% conflicting', labels: ['COL6A3', 'MUTYH', 'SETX', 'MSH2', 'COL6A1', 'RAD51C', 'BRCA1', 'BRCA2'], values: [16.9, 17.0, 17.6, 17.7, 18.5, 19.9, 21.6, 26.4] }],
   { x: 0.55, y: 1.75, w: 5.8, h: 3.4, barDir: 'bar', chartColors: [H.blue], showValue: true, dataLabelFormatCode: '0.0"%"', dataLabelPosition: 'outEnd', showLegend: false,
     valAxisHidden: true, valGridLine: { style: 'none' }, valAxisMaxVal: 32, barGapWidthPct: 40, showTitle: true, title: '% conflicting labels (genes with 2,000+ variants)', titleFontSize: 11, titleColor: H.mute });
@@ -337,7 +340,7 @@ bullets(s, ['BRCA2: 1 in 4 variants has conflicting labels', 'BRCA1/2 are the mo
 
 // ================= 26 TYPE STACKED =================
 s = newSlide('WHITE', 'Part 4 · Analysis & Insights');
-tag(s, 'INSIGHTS'); s.addText('Big DNA changes are easier to judge', { placeholder: 'title' });
+tag(s, 'INSIGHTS'); title(s, 'Big DNA changes are easier to judge');
 const tl = ['Single-letter (SNV)', 'Microsatellite', 'Indel', 'Insertion', 'Duplication', 'Deletion'];
 chart(s, pres.charts.BAR, [
   { name: 'Pathogenic (P/LP)', labels: tl, values: [4.9, 29.9, 43.2, 47.3, 54.1, 60.7] },
@@ -352,7 +355,7 @@ stat(s, 7.5, 3.5, 2.0, '57%', 'of single-letter changes are uncertain', CYAN, 30
 
 // ================= 27 TOP GENES / CONDITIONS =================
 s = newSlide('WHITE', 'Part 4 · Analysis & Insights');
-tag(s, 'INSIGHTS'); s.addText('Which genes and diseases come up most', { placeholder: 'title' });
+tag(s, 'INSIGHTS'); title(s, 'Which genes and diseases come up most');
 chart(s, pres.charts.BAR, [{ name: 'Pathogenic variants', labels: ['PKD1', 'APC', 'FBN1', 'ATM', 'BRCA1', 'NF1', 'BRCA2', 'TTN'], values: [2593, 2646, 3742, 3918, 4335, 5753, 5790, 6143] }],
   { x: 0.55, y: 1.75, w: 4.4, h: 3.4, barDir: 'bar', chartColors: [H.blue], showValue: true, dataLabelFormatCode: '#,##0', dataLabelPosition: 'outEnd', showLegend: false, valAxisHidden: true,
     valGridLine: { style: 'none' }, valAxisMaxVal: 7600, barGapWidthPct: 40, showTitle: true, title: 'Top genes (pathogenic variants)', titleFontSize: 11, titleColor: H.mute });
@@ -362,7 +365,7 @@ chart(s, pres.charts.BAR, [{ name: 'Pathogenic variants', labels: ['Neurofibroma
 
 // ================= 28 TAKEAWAYS (blue) =================
 s = newSlide('BLUE_A', 'Part 4 · Analysis & Insights');
-tag(s, 'INSIGHTS', true); s.addText('Key takeaways', { placeholder: 'title' });
+tag(s, 'INSIGHTS', true); title(s, 'Key takeaways');
 [['55% unknown', 'Most variants are still uncertain, and that pile grows every year.', LIME], ['Little double-checking', '77% come from one lab; only 0.5% were expert-reviewed.', WHITE],
  ['Disagreement where it matters', 'BRCA1/2, the most-tested genes, have the most conflicts.', LIME], ['Cleaning was essential', 'Without it, every number would be doubled or wrong.', WHITE]].forEach(([h, d, c], i) => {
   const x = i % 2 ? 5.15 : 0.55, y = i < 2 ? 1.95 : 3.2;
