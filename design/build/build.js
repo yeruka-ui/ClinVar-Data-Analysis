@@ -2,6 +2,7 @@ const pptxgen = require('pptxgenjs');
 const SKILL = '/root/.claude/skills/synced/8c24175c-62ad-47a4-ba77-2175656d9d7d_6991401d-8424-4649-a841-67daf3226585/pptx';
 const { applyTheme } = require(SKILL + '/scripts/apply_theme.js');
 const notes = require('./notes.json');
+const NOTES33 = require('./notes33.json');
 const MEDIA = '../orig/x/ppt/media/';
 const SIZES = require('./chartsizes.json');
 const ROC = require('./roc.json'), IMP = require('./imp.json'), HIST = require('./hist.json');
@@ -34,7 +35,7 @@ pres.defineSlideMaster({ title: 'BLUE_B', background: { path: 'bg_blueB.png' } }
 let n = 0, origN = 0, curDark = false;
 function newSlide(master, section, note) {
   const s = pres.addSlide({ masterName: master, sectionTitle: section });
-  s.addNotes(note != null ? note : (notes[origN++] || '')); n++;
+  s.addNotes(NOTES33[n] || ''); n++;
   curDark = master.startsWith('BLUE') || master.startsWith('DIV');
   if (master === 'WHITE' || master.startsWith('BLUE'))
     s.addText(String(n), { isTextBox: true, x: 9.0, y: 5.2, w: 0.45, h: 0.25, fontSize: 10, color: curDark ? WHITE : MUTE, align: 'right', margin: 0, objectName: 'Slide number' });
