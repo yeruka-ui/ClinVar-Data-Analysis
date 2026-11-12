@@ -50,10 +50,18 @@ body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
 .grp{flex:1;display:flex;gap:6px;align-items:flex-end;height:100%}.grp div{flex:1;border-radius:4px 4px 0 0}
 .glab{display:flex;gap:6px;margin-top:8px;font-size:13px;color:var(--mute)}.glab div{flex:1;text-align:center}
 .keys{display:flex;gap:14px;font-size:13px;color:var(--mute);margin-top:10px}.keys i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+.bluebg{color:#fff}
+.bluebg .tag{background:#fff;color:var(--blue)}
+.bluebg .num{color:rgba(255,255,255,.75)}
+.bluebg .grid2 p,.bluebg .take p{color:rgba(255,255,255,.92)}
+.bluebg .lab{color:rgba(255,255,255,.85)}
+.take{display:grid;grid-template-columns:1fr 1fr;gap:34px 64px;margin-top:40px;position:relative;z-index:2}
+.take .h3{margin-bottom:6px}.take p{font-size:15px;line-height:1.4}
+.why{position:absolute;left:56px;bottom:30px;font-size:14px;max-width:700px;color:rgba(255,255,255,.9)}
 .note{font-size:12px;color:var(--mute);margin:0 auto 6px;width:960px}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs id="defs"></defs></svg>
-<p class="note">SAMPLE v3 · 6 of 29 slides · gradient blue/green · 3D double helix · hexagon outlines · pill tags · all 29 slides will be kept</p>
+<p class="note">SAMPLE v3 · 7 of 29 slides · gradient blue/green · 3D double helix · hexagon outlines · pill tags · all 29 slides will be kept</p>
 
 <!-- COVER -->
 <section class="slide dark g-cover">
@@ -74,13 +82,13 @@ body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
 </section>
 
 <!-- TERMS -->
-<section class="slide">
-  <svg class="abs hx" data-hex='[[830,34,34],[886,2,34],[774,2,34],[942,34,34]]' data-stroke="#1E4FFF" data-op=".14" width="960" height="540"></svg>
+<section class="slide bluebg g-p1">
+  <svg class="abs hx" data-hex='[[830,34,34],[886,2,34],[774,2,34],[942,34,34]]' data-stroke="#fff" data-op=".3" width="960" height="540"></svg>
   <span class="tag">THE DATASET</span>
   <h1>Four terms you need first</h1>
   <div class="grid2">
-    <div><div class="h3"><span class="dot" style="background:var(--blue)"></span>DNA</div><p>The instruction manual in every cell, written in 4 letters: A, C, G, T.</p></div>
-    <div><div class="h3"><span class="dot" style="background:var(--cyan)"></span>Gene</div><p>One section of DNA that tells the body how to make one part.</p></div>
+    <div><div class="h3"><span class="dot" style="background:#fff"></span>DNA</div><p>The instruction manual in every cell, written in 4 letters: A, C, G, T.</p></div>
+    <div><div class="h3"><span class="dot" style="background:#7FE0FF"></span>Gene</div><p>One section of DNA that tells the body how to make one part.</p></div>
     <div><div class="h3"><span class="dot" style="background:var(--green)"></span>Variant</div><p>A change in the DNA letters, like a typo in a book. Some are harmless, some cause disease.</p></div>
     <div><div class="h3"><span class="dot" style="background:var(--lime)"></span>Genome build</div><p>A standard “map” of human DNA. GRCh37 is the old map, GRCh38 the new one.</p></div>
   </div>
@@ -155,6 +163,21 @@ body{background:#E6ECF5;font-family:Arial,Helvetica,sans-serif;color:var(--ink);
     </div>
   </div>
   <div class="num">22</div>
+</section>
+
+<!-- TAKEAWAYS (blue) -->
+<section class="slide bluebg g-p4">
+  <svg class="abs hx" data-hex='[[830,34,34],[886,2,34],[774,2,34],[942,34,34]]' data-stroke="#fff" data-op=".3" width="960" height="540"></svg>
+  <span class="tag">INSIGHTS</span>
+  <h1>Key takeaways</h1>
+  <div class="take">
+    <div><div class="h3" style="color:var(--lime)">55% unknown</div><p>Most variants are still uncertain, and that pile grows every year.</p></div>
+    <div><div class="h3" style="color:#7FE0FF">Little double-checking</div><p>77% come from one lab; only 0.5% were expert-reviewed.</p></div>
+    <div><div class="h3" style="color:#fff">Disagreement where it matters</div><p>BRCA1/2, the most-tested genes, have the most conflicts.</p></div>
+    <div><div class="h3" style="color:var(--green)">Cleaning was essential</div><p>Without it, every number would be doubled or wrong.</p></div>
+  </div>
+  <div class="why">Why it matters: clearer data means clearer test results for patients, better-aimed research, and knowing which labels to trust.</div>
+  <div class="num">28</div>
 </section>
 
 <script>
